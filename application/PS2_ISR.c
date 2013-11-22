@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "keyboard.h"
 extern volatile char byte1, byte2, byte3;
 extern volatile char *kbBuf;
 extern volatile unsigned int kbBufBegin, kbBufEnd;
@@ -6,6 +7,7 @@ extern volatile int change;
 extern volatile int packet1;
 extern volatile int packetX;
 extern volatile int packetY;
+extern volatile int keyPressed;
 
 /**
  * lookUpKBCode - lookup table for keyboard key codes, based
@@ -94,18 +96,9 @@ void PS2_ISR( void )
 		}
 		if(byte1 == byte2 || byte2 == (char)0xF0 || byte2 == (char)0xAA || byte3 == byte2 || byte2 == (char)0xFA)
 			return;
-        // lookup byte 1 in table on next update or now?
-        lookUpResult = lookUpKBCode(byte2);
-        // If the user pressed enter, clear the buffer
-        if(lookUpResult == '\n') {
-            kbBufEnd = kbBufBegin;
-            return;
-        }
+        keyPressed = byte2;
+        byte2 = 0x00;
 		change = 1;
-        kbBuf[kbBufEnd] = lookUpResult;
-        kbBufEnd = (kbBufEnd+1)%KB_BUF_SIZE;
-        if(kbBufEnd == kbBufBegin)
-            ++kbBufBegin;
 	}
 	return;
 }

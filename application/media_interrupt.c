@@ -1,5 +1,6 @@
 #include "nios2_ctrl_reg_macros.h"
 #include "globals.h"
+#include "keyboard.h"
 
 #define SCREEN_WIDTH 319
 #define SCREEN_HEIGHT 239
@@ -24,7 +25,7 @@ int mouseX,
 const int box_len = 8;
 
 /* function prototypes */
-void VGA_subStrn(int, int, char *, unsigned int, unsigned int, unsigned int);
+void VGA_subStrn(int, int, volatile char *, unsigned int, unsigned int, unsigned int);
 void VGA_text (int, int, char *);
 void VGA_box (int, int, int, short);
 void fill_screen (int, int, int, int, short);
@@ -103,27 +104,41 @@ int main(void)
 	/* the following variables give the size of the pixel buffer */
 	screen_x = SCREEN_WIDTH; screen_y = SCREEN_HEIGHT;
 	color = 0x1863;		// a dark grey color
+    printf("here");
 	fill_screen (0, 0, screen_x, screen_y, color);	// fill the screen with grey
-	// draw a medium-blue box around the above text, based on the character buffer coordinates
+	printf("after");
+    // draw a medium-blue box around the above text, based on the character buffer coordinates
 	blue_x = 28; blue_y = 26;
 	// character coords * 4 since characters are 4 x 4 pixel buffer coords (8 x 8 VGA coords)
 	color = 0x187F;		// a medium blue color
 
 	char_buffer_x = 79; char_buffer_y = 59;
 	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
+    printf("Before loop");
 	while (1)
 	{
 		while (!timeout)
 			;	// wait to synchronize with timer 
 
+        printf("printing VGA box");
         VGA_box(blue_x, blue_y, box_len, background_color);
+        printf("finished printing VGA box");
+        
+        if (getKey() == UP)
+            printf("UP\n");
+        else if (getKey() == DOWN)
+            printf("DOWN\n");
+        else if (getKey() == RIGHT)
+            printf("RIGHT\n");
+        else if (getKey() == LEFT)
+            printf("LEFT\n");
 
 		/* display PS/2 data (from interrupt service routine) on HEX displays */
-		if(change == 1)
+		/*if(change == 1)
 		{
 			change = 0;
 			VGA_subStrn(0, 0, kbBuf, kbBufBegin, kbBufEnd, KB_BUF_SIZE);
-		}
+		}*/
 		timeout = 0;
 	}
 }
@@ -188,7 +203,7 @@ void VGA_printKBScanCode(int x, int y) {
  * last - index after the last character to write
  * len - length of the buffer
 ****************************************************************************************/
-void VGA_subStrn(int x, int y, char *buffer, unsigned int first, unsigned int last, unsigned int len)
+void VGA_subStrn(int x, int y, volatile char *buffer, unsigned int first, unsigned int last, unsigned int len)
 {
 	int offset;
   	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer

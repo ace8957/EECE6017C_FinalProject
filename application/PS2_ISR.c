@@ -83,32 +83,10 @@ void PS2_ISR( void )
 		if ( (byte1 == (char) 0xAA) && (byte2 == (char) 0x00) ) {
 			// mouse inserted; initialize sending of data
 			*(PS2_ptr) = 0xF4;
-            isMouse = 1;
-            //printf("Mouse inserted\n");
             return;
         }
 		if(!ackReceived && byte2 == (char)0xFA)
 			ackReceived = 1;
-
-        if(isMouse && ackReceived) {
-			if(byteCount == 0) {
-				packet1 = PS2_data & 0xFF;
-				mouseDataReady = 0;
-			}
-			else if(byteCount == 1) {
-				packetX = PS2_data & 0xFF;
-				mouseDataReady = 0;
-			}
-			else if(byteCount == 2) {
-				packetY = PS2_data & 0xFF;
-				mouseDataReady = 1;
-			}
-            byteCount = (byteCount + 1)%3;
-			return;
-        }
-        else if(isMouse) {
-            printf("Received ACK from mouse\n");
-        }
         // byte 2 == 0x00 means make key,
 		//printf("byte 1 = %x, byte 2 = %x\n",byte1,byte2);
 		if(byte2 == (char)0XF0) {

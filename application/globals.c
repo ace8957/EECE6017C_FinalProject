@@ -1,9 +1,6 @@
 #include "globals.h"
 
 /* global variables */
-volatile int left_buffer[BUF_SIZE];				// audio buffer
-volatile int right_buffer[BUF_SIZE]; 			// audio buffer
-
 volatile char byte1, byte2, byte3;				// PS/2 variables
 volatile char packet1, packetX, packetY;		//part of the PS/2 mouse packets
 volatile char kbBuf[KB_BUF_SIZE];             // Keyboard input buffer

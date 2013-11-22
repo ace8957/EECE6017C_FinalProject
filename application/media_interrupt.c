@@ -64,7 +64,6 @@ int main(void)
 
 	/* initialize some variables */
 	byte1 = 0; byte2 = 0; 			// used to hold PS/2 data
-	record = 0; play = 0; buffer_index = 0;	// used for audio record/playback
 	timeout = 0;										// synchronize with the timer
 
 	/* these variables are used for a blue box and a "bouncing" ALTERA on the VGA screen */
@@ -112,51 +111,15 @@ int main(void)
 
 	char_buffer_x = 79; char_buffer_y = 59;
 	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
-    flags = UP;
 	while (1)
 	{
 		while (!timeout)
 			;	// wait to synchronize with timer 
 
         VGA_box(blue_x, blue_y, box_len, background_color);
-        blue_x += ALT_inc_x;
-        blue_y += ALT_inc_y;
-
-		if (blue_y <= 0) {
-			ALT_inc_y = -(ALT_inc_y);
-            flags = DOWN;
-        }
-        else if (blue_x <= 0) {
-			ALT_inc_x = -(ALT_inc_x);
-            flags = RIGHT;
-        }
-        else if (blue_y+box_len >= screen_y) {
-			if(blue_y+box_len > screen_y)
-			{
-				blue_y = screen_y-box_len-1;
-			}
-            if(flags & DOWN) {
-                ALT_inc_y = 0;
-                ALT_inc_x = -4;
-                flags = LEFT;
-            }
-        }
-        else if(blue_x+box_len >= screen_x) {
-			if(blue_x > screen_x)
-			{
-				blue_x = screen_x-box_len-1;
-			}
-            if(flags & RIGHT) {
-                ALT_inc_y = -4;
-                ALT_inc_x = 0;
-                flags = UP;
-            }
-        }
-
-		VGA_box (blue_x, blue_y, box_len,color);
 
 		/* display PS/2 data (from interrupt service routine) on HEX displays */
-		if(change == 1 && !isMouse)
+		if(change == 1)
 		{
 			change = 0;
 			VGA_subStrn(0, 0, kbBuf, kbBufBegin, kbBufEnd, KB_BUF_SIZE);

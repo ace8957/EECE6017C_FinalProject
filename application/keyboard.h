@@ -9,3 +9,6 @@
 #define DOWN    0x1B   // s
 #define RIGHT   0x23   // d
 #define LEFT    0x1C   // a
+#define ENTER    0x5A   // a
+#define ESC 0x76 //esc
+#define NOP    0x00   // nop

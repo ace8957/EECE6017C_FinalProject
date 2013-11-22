@@ -46,4 +46,19 @@ int getKey(void)
         keyboardLock = 0;
         return LEFT;
     }
+	else if(keyPressed == ESC)
+	{
+		keyboardLock = 0;
+		return ESC;
+	}
+	else if(keyPressed == ENTER)
+	{
+		keyboardLock = 0;
+		return ENTER;
+	}
+	else
+	{
+		keyboardLock = 0;
+		return NOP;
+	}
 }

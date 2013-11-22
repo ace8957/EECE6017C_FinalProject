@@ -1,6 +1,7 @@
 
 #define ESC 0x76
 #define SPACE 0x29
+#define ENTER 0x5A
 
 // We are going to assign w, a, s, d as the movement keys as we would have
 // to look at two scan codes for the actual arrows.

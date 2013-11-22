@@ -74,6 +74,8 @@ int main(void)
 	int screen_x; int screen_y; int char_buffer_x; int char_buffer_y;
 	short color;
     const short background_color = 0x1863;
+    
+    int keyVal = 0;
 
 	/* set the interval timer period for scrolling the HEX displays */
 	int counter = 0x960000;				// 1/(50 MHz) x (0x960000) ~= 200 msec
@@ -119,13 +121,14 @@ int main(void)
 
         VGA_box(blue_x, blue_y, box_len, background_color);
         
-        if (getKey() == UP)
+        keyVal = getKey();
+        if (keyVal == UP)
             printf("UP\n");
-        else if (getKey() == DOWN)
+        else if (keyVal == DOWN)
             printf("DOWN\n");
-        else if (getKey() == RIGHT)
+        else if (keyVal == RIGHT)
             printf("RIGHT\n");
-        else if (getKey() == LEFT)
+        else if (keyVal == LEFT)
             printf("LEFT\n");
 
 		/* display PS/2 data (from interrupt service routine) on HEX displays */

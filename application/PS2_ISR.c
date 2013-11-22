@@ -99,8 +99,8 @@ void PS2_ISR( void )
 		//(byte1 == byte2 || byte2 == (char)0xFFFFFFF0 || byte2 == (char)0xAA || byte3 == byte2 || byte2 == (char)0xFA)
 		//	return;
         
-        if (byte2 == byte3 && (byte4 == 0xFFFFFFF0 || byte4 == 0xF0))
-            keyPressed = byte2;
+        //if (byte2 == byte3 && (byte4 == 0xFFFFFFF0 || byte4 == 0xF0))
+        //    keyPressed = byte2;
         
 		change = 1;
 	}

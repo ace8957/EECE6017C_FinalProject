@@ -1,13 +1,14 @@
 #include "globals.h"
 #include "keyboard.h"
-extern volatile char byte1, byte2, byte3;
+extern volatile char byte1, byte2, byte3, byte4;
 extern volatile char *kbBuf;
 extern volatile unsigned int kbBufBegin, kbBufEnd;
 extern volatile int change;
 extern volatile int packet1;
 extern volatile int packetX;
 extern volatile int packetY;
-extern volatile int keyPressed;
+extern volatile char keyPressed;
+extern volatile int keyboardLock;
 
 /**
  * lookUpKBCode - lookup table for keyboard key codes, based
@@ -80,24 +81,27 @@ void PS2_ISR( void )
 	if (RVALID)
 	{
 		/* always save the last two bytes received */
-		byte1 = byte2;
+        byte3 = byte4;
+		byte4 = byte2;
 		byte2 = PS2_data & 0xFF;
 		if ( (byte1 == (char) 0xAA) && (byte2 == (char) 0x00) ) {
 			// mouse inserted; initialize sending of data
 			*(PS2_ptr) = 0xF4;
             return;
         }
-		if(!ackReceived && byte2 == (char)0xFA)
-			ackReceived = 1;
+		//if(!ackReceived && byte2 == (char)0xFA)
+		//	ackReceived = 1;
         // byte 2 == 0x00 means make key,
-		//printf("byte 1 = %x, byte 2 = %x\n",byte1,byte2);
-		if(byte2 == (char)0XF0) {
-			byte3 = byte1;
-		}
-		if(byte1 == byte2 || byte2 == (char)0xF0 || byte2 == (char)0xAA || byte3 == byte2 || byte2 == (char)0xFA)
-			return;
-        keyPressed = byte2;
-        byte2 = 0x00;
+		printf("byte 1 = %x, byte 2 = %x, byte 3 = %x, byte 4 = %x\n",byte1,byte2,byte3,byte4);
+		//if(byte2 == (char)0XF0) {
+		//	byte3 = byte1;
+		//}
+		//(byte1 == byte2 || byte2 == (char)0xFFFFFFF0 || byte2 == (char)0xAA || byte3 == byte2 || byte2 == (char)0xFA)
+		//	return;
+        
+        if (byte2 == byte3 && (byte4 == 0xFFFFFFF0 || byte4 == 0xF0))
+            keyPressed = byte2;
+        
 		change = 1;
 	}
 	return;

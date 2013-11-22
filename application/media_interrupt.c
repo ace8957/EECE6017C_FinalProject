@@ -104,9 +104,7 @@ int main(void)
 	/* the following variables give the size of the pixel buffer */
 	screen_x = SCREEN_WIDTH; screen_y = SCREEN_HEIGHT;
 	color = 0x1863;		// a dark grey color
-    printf("here");
 	fill_screen (0, 0, screen_x, screen_y, color);	// fill the screen with grey
-	printf("after");
     // draw a medium-blue box around the above text, based on the character buffer coordinates
 	blue_x = 28; blue_y = 26;
 	// character coords * 4 since characters are 4 x 4 pixel buffer coords (8 x 8 VGA coords)
@@ -114,15 +112,12 @@ int main(void)
 
 	char_buffer_x = 79; char_buffer_y = 59;
 	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
-    printf("Before loop");
 	while (1)
 	{
 		while (!timeout)
 			;	// wait to synchronize with timer 
 
-        printf("printing VGA box");
         VGA_box(blue_x, blue_y, box_len, background_color);
-        printf("finished printing VGA box");
         
         if (getKey() == UP)
             printf("UP\n");

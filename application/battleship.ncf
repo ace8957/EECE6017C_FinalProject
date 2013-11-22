@@ -28,7 +28,9 @@
                 <source_file filepath="true">nios2_ctrl_reg_macros.h</source_file>               
                 <source_file filepath="true">exception_handler.c</source_file>               
                 <source_file filepath="true">keyboard.h</source_file>               
-                <source_file filepath="true">keyboard.c</source_file>               
+                <source_file filepath="true">keyboard.c</source_file>
+                <source_file filepath="true">serial.h</source_file>
+                <source_file filepath="true">serial.c</source_file>
             </source_files>
             <compiler_flags>-O1 -ffunction-sections -fverbose-asm -fno-inline</compiler_flags>
             <emulate_unimpl_instructions>true</emulate_unimpl_instructions>

@@ -1,6 +1,7 @@
 #include "nios2_ctrl_reg_macros.h"
 #include "globals.h"
 #include "keyboard.h"
+#include "serial.h"
 
 #define SCREEN_WIDTH 319
 #define SCREEN_HEIGHT 239
@@ -114,6 +115,8 @@ int main(void)
 
 	char_buffer_x = 79; char_buffer_y = 59;
 	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
+    
+    
 	while (1)
 	{
 		while (!timeout)
@@ -121,7 +124,8 @@ int main(void)
 
         VGA_box(blue_x, blue_y, box_len, background_color);
         
-        keyVal = getKey();
+        //keyVal = getKey();
+        flags = sendSerialMessage(0x11);
         if (keyVal == UP)
             printf("UP\n");
         else if (keyVal == DOWN)

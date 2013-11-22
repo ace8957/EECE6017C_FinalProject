@@ -45,5 +45,5 @@ int main()
 int start_new_game(){
 	// choose player 1 and player 2 - or AI for player 2
 	// place ships in turn
-	retuern 0;
+    return 0;
 }

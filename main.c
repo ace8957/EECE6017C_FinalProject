@@ -21,14 +21,14 @@ int main()
 	
 	
 	/* 	initial program start / restart */	
-	start_new_game = new_game(); // call the function to setup a new game, reset new game flag
+	new_game = start_new_game(); // call the function to setup a new game, reset new game flag
 	
 	
 
 	/* main program loop */
 	while (1){
 		if (start_new_game){
-			start_new_game = new_game(); // call the function to setup a new game, reset new game flag
+			new_game = start_new_game(); // call the function to setup a new game, reset new game flag
 		}
 		
 		// player one take turn

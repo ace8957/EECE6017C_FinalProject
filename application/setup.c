@@ -27,6 +27,10 @@ int start_new_game()
 	reset_player_arrays();	
 	
 	// place ships on screen in turn
+	if (player_number == player2){
+		// wait for player one to finish placing ships
+		// 
+	}
 	place_ships();
 	
 	return 0;
@@ -43,6 +47,13 @@ void reset_player_arrays()
 
 void place_ships()
 {
+	int ship_size[number_of_ships] = [carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size];
+	int current_ship_length, current_ship_height;
+	
+	for (i=0; i<number_of_ships;i++){
+		current_ship_length = board_size - ship_size[i];
+		current_ship_height = 1;
+	}
 	// player 1 place ships
 	// a,d,s,w to move ships
 	// space bar to rotate ships

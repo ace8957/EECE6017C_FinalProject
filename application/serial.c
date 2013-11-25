@@ -39,6 +39,7 @@ int sendSerialMessage(unsigned char msg)
          }
         return 0;
     }
+	return 1;
 }
 
 int tx_Handshake(void)

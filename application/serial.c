@@ -13,22 +13,44 @@
 #define RS232_UART_DATA ((volatile int*) 0x10001010)
 #define RS232_UART_CONTROL ((volatile int*) (0x10001010+4))
  
-int sendSerialMessage(char msg)
+int sendSerialMessage(unsigned char msg)
 {
-    //volatile int * RS232_data_ptr = (int *) 0x10001010; // RS232 data register address
-    //volatile int * RS232_ctrl_ptr = (int *) 0x10001030; // RS232 control register address
     
-    //int data = 0xFFFF;
     
-    //data = *(RS232_data_ptr);  // read the Data register in the RS232 port
-    //data = (data & 0xFF00);    // extract the upper 2 bytes from the RS232 data register
-    //data  = data | msg;        // write the message to the lower 2 bytes of the data register    
-    //*(RS232_data_ptr) = data; // write to the data back into the data register
-    
+    // University of Toronto Website
     unsigned char hwld[] = {'H','e','l','l','o',' ','W','o','r','l','d','\0'};
     unsigned char *pOutput;
 
     pOutput = hwld;
+    if (tx_Handshake() == 1)
+    {
+        return 1;
+    }
+    else
+    {
+        while(*pOutput) //strings in C are zero terminated
+        {
+             //if room in output buffer
+             if((*RS232_UART_CONTROL)&0xffff0000  ) 
+             {
+                //then write the next character
+                *RS232_UART_DATA = (*pOutput++); 
+             }
+         }
+        return 0;
+    }
+	return 1;
+}
+
+int tx_Handshake(void)
+{
+    unsigned char tx_handshake[] = {'1', '1', '1', '1', '1', '1', '1', '1'};
+    unsigned char rx_handshake[] = {'2', '2', '2', '2', '2', '2', '2', '2'};
+    unsigned char *pOutput;
+    
+    unsigned int count = 0;
+    
+    pOutput = tx_handshake;
     while(*pOutput) //strings in C are zero terminated
     {
          //if room in output buffer
@@ -37,6 +59,18 @@ int sendSerialMessage(char msg)
             //then write the next character
             *RS232_UART_DATA = (*pOutput++); 
          }
-     }
+    }
+    while(1)
+    {
+        // wait until our data field contains the rx_message;
+        if (((*RS232_UART_DATA) & 0x0000ffff ) == 0x00000002)
+        {
+            count++;
+        }
+        if (count == 7)
+        {
+            return 0;
+        }
+    }
     return 1;
 }

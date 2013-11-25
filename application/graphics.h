@@ -17,16 +17,22 @@ struct color
     .blue = 0;\
 }
 
-#define COLOR_GREEN struct color {\
-    .red = 0;\
+#define COLOR_WHITE struct color {\
+    .red = 255;\
     .green = 255;\
-    .blue = 0;\
+    .blue = 255;\
 }
 
 #define COLOR_BLUE struct color {\
     .red = 0;\
     .green = 0;\
     .blue = 255;\
+}
+
+#define COLOR_GREY struct color {\
+    .red = 128;\
+    .green = 128;\
+    .blue = 128;\
 }
 
 inline struct color colorRGB(unsigned char red, unsigned char green, unsigned char blue);

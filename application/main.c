@@ -6,7 +6,7 @@
 #include "keyboard.h"
 #include "nios2_ctrl_reg_macros.h"
 #include "serial.h"
-
+/*
 int new_game = 0;  // stay zero unless the user decides to start a new game
 
 void start_new_game();
@@ -14,7 +14,7 @@ void start_new_game();
 // main function
 int main()
 {
-	/* add setup instructions here */
+    // add setup instructions here
 	// initialize serial, vga, ps/2, etc
 	// decide player 1 vs player 2 -- maybe we need to get the serial number of the boards
 	// or some other available hard coded number and hard code the player one and player two boards 
@@ -23,12 +23,12 @@ int main()
 	// at least at first.
 	
 	
-	/* 	initial program start / restart */	
+    // 	initial program start / restart
 	new_game = start_new_game(); // call the function to setup a new game, reset new game flag
 	
 	
 
-	/* main program loop */
+    // main program loop
 	while (1){
 		if (start_new_game){
 			new_game = start_new_game(); // call the function to setup a new game, reset new game flag
@@ -50,3 +50,4 @@ int start_new_game(){
 	// place ships in turn
     return 0;
 }
+*/

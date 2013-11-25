@@ -1,6 +1,9 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H 1
 
+#define VGA_WIDTH 320 
+#define VGA_HEIGHT 240
+
 struct color
 {
     unsigned char red;

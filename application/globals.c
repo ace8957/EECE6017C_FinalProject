@@ -14,3 +14,6 @@ volatile int timeout;								// used to synchronize with the timer
 
 volatile int myBoard[board_size];
 volatile int opBoard[board_size];
+
+
+volatile int player_number = 1; // default player 1

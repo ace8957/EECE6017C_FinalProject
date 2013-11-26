@@ -51,6 +51,7 @@ void drawBox(int x, int y, int width, int height, struct color c)
 		col = x;
 		while (col <= x+len)
 		{
+            // From this calculation, it appears that the pixel buffer is laid out as 320 rows of 512 columns
 			offset = (row << 9) + col;
 			*(pixel_buffer + offset) = colorAsShort(c);	// compute halfword address, set pixel
 			++col;

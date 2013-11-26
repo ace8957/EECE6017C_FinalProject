@@ -8,29 +8,13 @@ struct color
     unsigned char blue;
 };
 
-#define COLOR_RED {\
-    .red = 255;\
-    .green = 0;\
-    .blue = 0;\
-}
+#define COLOR_HIT colorRGB(255, 0, 0)
 
-#define COLOR_WHITE {\
-    .red = 255;\
-    .green = 255;\
-    .blue = 0;\
-}
+#define COLOR_MISS colorRGB(255, 255, 0)
 
-#define COLOR_BLUE {\
-    .red = 0;\
-    .green = 0;\
-    .blue = 255;\
-}
+#define COLOR_WATER colorRGB(0, 0, 255)
 
-#define COLOR_GREY {\
-    .red = 128;\
-    .green = 128;\
-    .blue = 128;\
-}
+#define COLOR_SHIP colorRGB(128, 128, 128)
 
 inline struct color colorRGB(unsigned char red, unsigned char green, unsigned char blue);
 

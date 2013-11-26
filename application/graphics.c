@@ -18,10 +18,10 @@ inline short colorAsShort(struct color c)
 
 inline struct color colorRGB(unsigned char red, unsigned char green, unsigned char blue)
 {
-    struct color c{
-        .red = red;
-        .green = green;
-        .blue = blue;
+    struct color c = {
+        .red = red,
+        .green = green,
+        .blue = blue
     };
     return c;
 }
@@ -46,11 +46,10 @@ void drawBox(int x, int y, int width, int height, struct color c)
   	volatile short * pixel_buffer = (short *) 0x08000000;	// VGA pixel buffer
 
 	/* assume that the box coordinates are valid */
-	for (row = y; row <= y+len; row++)
+	for (row = y; row <= y+height; ++row)
 	{
-		col = x;
-		while (col <= x+len)
-		{
+		for(col = x; col < x+width; ++col)
+        {
             // From this calculation, it appears that the pixel buffer is laid out as 320 rows of 512 columns
 			offset = (row << 9) + col;
 			*(pixel_buffer + offset) = colorAsShort(c);	// compute halfword address, set pixel

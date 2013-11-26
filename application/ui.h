@@ -1,8 +1,8 @@
 #ifndef UI_H
 #define UI_H 1
 
-const int MENU_OK = 0;
-const int MENU_ESCAPE = -1;
+#define MENU_OK 0;
+#define MENU_ESCAPE -1;
 
 /**
  * Create a menu and hand program control to it until the user

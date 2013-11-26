@@ -1,6 +1,9 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H 1
 
+#define VGA_WIDTH 320
+#define VGA_HEIGHT 240
+
 struct color
 {
     unsigned char red;
@@ -24,7 +27,7 @@ inline struct color colorRGB(unsigned char red, unsigned char green, unsigned ch
  * @param y Where the text begins along the vertical axis
  * @param text_ptr Null terminated string to be displayed
  */
-void drawText(int x, int y, char * text_ptr);
+void drawText(int x, int y, const char * text_ptr);
 
 /*
  * Draw a filled rectangle of the specified color.

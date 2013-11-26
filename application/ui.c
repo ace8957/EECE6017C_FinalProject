@@ -7,11 +7,10 @@
 
 int displayMenu(const char *title, unsigned int numOptions, ...)
 {
-    int selection = 1,
-        menuWidth,
-        menuHeight;
-    char optionList[16][256];
+    int selection = 1;
     va_list options;
+    // Get the options
+    char optionList[16][256];
     unsigned int i;
     va_start(options, numOptions);
     for(i = 0; i < numOptions; ++i) {
@@ -24,35 +23,64 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
     drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(30, 30, 30));
 
     // Calculate the outermost menubox width and height
-    menuWidth = 200;
-    menuHeight = (numOptions+1)*14;
-    drawBox((VGA_WIDTH/2)-(menuWidth/2), (VGA_HEIGHT-menuHeight)/2, menuWidth, menuHeight, colorRGB(11, 10, 177));
-    drawText();
-    // Draw the selection background
-    // Draw the title
-    // Draw the options in their own boxes, with the first option highlighted
+    const int optionBoxHeight = 10,
+              optionBoxSeparation = 4,
+              optionBoxWidth = 150;
+    int menuWidth = 200;
+    int menuHeight = (numOptions+1)*(optionBoxHeight+optionBoxSeparation);
 
+    int menuX = (VGA_WIDTH-menuWidth)/2;
+    int menuY = (VGA_HEIGHT-menuHeight)/2;
+
+    drawBox(menuX, menuY, menuWidth, menuHeight, colorRGB(11, 10, 177));
+    
+    // Draw the title
+    drawText(menuX+10, menuY+10, title);
+   
     // User wants to display a message box
     if(numOptions == 0) {
-        // wait on user input
-        char keyPress;
-        while(keyPress = getKey()) {
-            if(keyPress == ESC) {
-                selection = MENU_ESCAPE;
-                break;
-            }
-            else if(keyPress == ENTER) {
-                selection = MENU_OK;
-                break;
-            }
-            // ignore other keys, no other options
-        }
+        strncpy(optionList[0], "Okay", 256);
+        numOptions = 1;
     }
-    else { // Display a menu option
-        int selection = 1;
+
+    int keyPress;
+    int optionX = (menuX+menuWidth-optionBoxWidth)/2,
+        optionY;
+    do {
+        // Draw the selection background
+        optionY = menuY+selection*optionBoxHeight - (optionBoxSeparation/2);
+        drawBox(optionX, optionY, optionBoxWidth, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
+
+        // Draw the options in their own boxes, with the first option highlighted
+        for(i = 0; i < numOptions; ++i) {
+            optionY = menuY+selection*optionBoxHeight;
+            drawBox(optionX, optionY, optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
+            drawText(optionX+10, optionY+(optionBoxHeight/2), optionList[i]);
+        }
+
+        keyPress = getKey();
+        if(keyPress == ESC) {
+            selection = MENU_ESCAPE;
+            break;
+        }
+        else if(keyPress == ENTER) {
+            break;
+        }
+        else if(keyPress == UP) {
+            selection = (selection + 1)%numOptions;
+        }
+        else if(keyPress == DOWN) {
+            --selection;
+            if(selection == 0)
+                selection = numOptions;
+        }
+        // ignore other keys, no other options
 
     }
+    while(1);
+
     return selection;
+}
 
 
 void displayBoard(int board[], int yourBoard)
@@ -83,15 +111,14 @@ void displayBoard(int board[], int yourBoard)
           y = y+square+1;
         }
         // Water - Red
-        if(board[i] == 0) drawBox(x, y, square, square, colorRGB(0,0,255));      
+        if(board[i] == 0) drawBox(x, y, square, square, COLOR_WATER);
         // Miss - White
-        if(board[i] == 2) drawBox(x, y, square, square, colorRGB(255,255,255));      
+        if(board[i] == 2) drawBox(x, y, square, square, COLOR_MISS);
         // Hit - Red
-        if(board[i] == 4) drawBox(x, y, square, square, colorRGB(255,0,0));      
+        if(board[i] == 4) drawBox(x, y, square, square, COLOR_HIT);
         // Ship - Grey
-        if(board[i] > 7 && yourBoard) drawBox(x, y, square, square, colorRGB(128,128,128));      
+        if(board[i] > 7 && yourBoard) drawBox(x, y, square, square, COLOR_SHIP);
     
         x += square + 1;  // Leave a one pixel boarder between squares
     }
 }
-

@@ -26,7 +26,7 @@ inline struct color colorRGB(unsigned char red, unsigned char green, unsigned ch
     return c;
 }
 
-void drawText(int x, int y, char * text_ptr)
+void drawText(int x, int y, const char * text_ptr)
 {
 	int offset;
   	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer

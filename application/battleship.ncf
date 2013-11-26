@@ -35,6 +35,10 @@
 				<source_file filepath="true">setup.h</source_file>
 				<source_file filepath="true">game.c</source_file>
 				<source_file filepath="true">game.h</source_file>
+				<source_file filepath="true">graphics.c</source_file>
+				<source_file filepath="true">graphics.h</source_file>
+				<source_file filepath="true">ui.c</source_file>
+				<source_file filepath="true">ui.h</source_file>
             </source_files>
             <compiler_flags>-O1 -ffunction-sections -fverbose-asm -fno-inline</compiler_flags>
             <emulate_unimpl_instructions>true</emulate_unimpl_instructions>

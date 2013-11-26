@@ -1,3 +1,5 @@
+#ifndef KEYBOARD_H
+#define KEYBOARD_H 1
 
 #define ESC 0x76
 #define SPACE 0x29
@@ -12,3 +14,7 @@
 #define ENTER    0x5A   // a
 #define ESC 0x76 //esc
 #define NOP    0x00   // nop
+
+int getKey(void);
+
+#endif //KEYBOARD_H

@@ -11,7 +11,8 @@
 #include "globals.h"
 
 #define RS232_UART_DATA ((volatile int*) 0x10001010)
-#define RS232_UART_CONTROL ((volatile int*) (0x10001010+4))
+#define RS232_UART_READ_DATA ((volatile int*) 0x10001012)
+#define RS232_UART_CONTROL ((volatile int*) (0x10001014))
  
 int sendSerialMessage(unsigned char msg)
 {
@@ -40,6 +41,21 @@ int sendSerialMessage(unsigned char msg)
         return 0;
     }
 	return 1;
+}
+
+int rx_Handshake(void) {
+	unsigned int data_reg;
+	unsigned int data_reg_old;
+	unsigned int control_reg;
+	while(1) {
+		data_reg_old = data_reg;
+		data_reg = ((*RS232_UART_READ_DATA) & 0x7F);
+		control_reg = (*RS232_UART_CONTROL);
+		// if(data_reg != 0 || control_reg != 0x800000)
+			// printf("Data reg: %x, Control reg: %x\n", data_reg, control_reg);
+		if(data_reg != data_reg_old)
+			printf("character: %c\n", (char)data_reg);
+	}
 }
 
 int tx_Handshake(void)

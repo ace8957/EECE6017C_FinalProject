@@ -125,7 +125,7 @@ int main(void)
         VGA_box(blue_x, blue_y, box_len, background_color);
         
         //keyVal = getKey();
-        flags = sendSerialMessage(0x11);
+        flags = rx_Handshake();
         if (keyVal == UP)
             printf("UP\n");
         else if (keyVal == DOWN)

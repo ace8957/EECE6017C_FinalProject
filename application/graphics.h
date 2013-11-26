@@ -1,9 +1,6 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H 1
 
-#define VGA_WIDTH 320 
-#define VGA_HEIGHT 240
-
 struct color
 {
     unsigned char red;
@@ -11,25 +8,25 @@ struct color
     unsigned char blue;
 };
 
-#define COLOR_RED struct color {\
+#define COLOR_RED {\
     .red = 255;\
     .green = 0;\
     .blue = 0;\
 }
 
-#define COLOR_WHITE struct color {\
+#define COLOR_WHITE {\
     .red = 255;\
     .green = 255;\
-    .blue = 255;\
+    .blue = 0;\
 }
 
-#define COLOR_BLUE struct color {\
+#define COLOR_BLUE {\
     .red = 0;\
     .green = 0;\
     .blue = 255;\
 }
 
-#define COLOR_GREY struct color {\
+#define COLOR_GREY {\
     .red = 128;\
     .green = 128;\
     .blue = 128;\

@@ -41,4 +41,45 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
 
     }
     return selection;
+
+
+void displayBoard(int board[], int yourBoard)
+{
+    int x = 1;
+    int y = 1;
+    int dimension = 120;
+    
+    if(yourBoard){
+        // Draw black box that covers the entire screen
+        drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(0,0,0));
+    } else {
+        x = dimension;
+        y = dimension;
+        dimension = 160;
+        drawBox(x, y, dimension, dimension, colorRGB(0,0,0));
+    }  
+    
+    // Set the dimension for each individual square (12 or 16 pixels)
+    int square = dimension/10;
+
+    // Loop through the board array and color individual squares accordingly
+    int i = 0;
+    for(i;i<100;i++){
+        // Reset x & y corrdinates for a new row
+        if(i%10 == 0){
+          x = 1;
+          y = y+square+1;
+        }
+        // Water - Red
+        if(board[i] == 0) drawBox(x, y, square, square, colorRGB(0,0,255));      
+        // Miss - White
+        if(board[i] == 2) drawBox(x, y, square, square, colorRGB(255,255,255));      
+        // Hit - Red
+        if(board[i] == 4) drawBox(x, y, square, square, colorRGB(255,0,0));      
+        // Ship - Grey
+        if(board[i] > 7 && yourBoard) drawBox(x, y, square, square, colorRGB(128,128,128));      
+    
+        x += square + 1;  // Leave a one pixel boarder between squares
+    }
 }
+

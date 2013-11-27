@@ -13,7 +13,38 @@
 #define RS232_UART_DATA ((volatile int*) 0x10001010)
 #define RS232_UART_READ_DATA ((volatile int*) 0x10001012)
 #define RS232_UART_CONTROL ((volatile int*) (0x10001014))
- 
+
+/* API Function: sendGameBoard()
+ * 
+ * This call will send the game board across the serial port once a handshake
+ * has been setup.
+ * 
+ * @param p_GameBoard   A pointer to the beginning of the game board array.
+ * 
+ * @ret int A status code
+ *  SERIAL_SUCCESS - the game board was sent successfuly
+ *  SERIAL_FAIL - the game board failed to send.
+ */
+int sendGameBoard()
+{
+    return SERIAL_SUCCESS;
+}
+
+/* API Function: receiveGameBoard()
+ * 
+ * This call will wait until the partner board sends the other game board.
+ * Once it receives the board it will pass back a pointer to beginning of
+ * the updated game board.
+ * 
+ * @ret int* the updated game board.
+ */
+int* receiveGameBoard(void)
+{
+    return p_GameBoard;
+} 
+
+// Helper functions
+
 int sendSerialMessage(unsigned char msg)
 {
     

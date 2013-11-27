@@ -3,6 +3,7 @@
 #include "setup.h"
 #include "globals.h"
 #include "keyboard.h"
+#include "serial.h"
 
 #define initial_position	0
 
@@ -36,8 +37,13 @@ int start_new_game()
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
 		// 
+        receiveGameBoard();
 	}
 	place_ships();
+    if(player_number == player_one){
+        receiveGameBoard();
+    }
+
 	
 	return 0;
 }
@@ -59,14 +65,17 @@ void place_ships()
 	int vertical = 0; // 0 for ship along x-axis, 1 for ship along y-axis
 	int ship_position[2] = {initial_position, initial_position}; // start at 0,0 -> A0
 	int key_value = NOP; // the key value from the keyboard
-	int i;
+    int i, n;//loop variables
+    int x, y;// x and y position for checking
+    int next_position;//the value to add to get to the next position
+    int placed =0;
 	
 	
 	for (i=0; i<number_of_ships;i++){
 		current_length_max = board_size - ship_size[i];
 		current_width_max = board_size - 1;
 		
-		while(key_value != ENTER){
+        while(!placed){
 			key_value = getKey();
 			switch (key_value){
 				case UP:
@@ -105,20 +114,47 @@ void place_ships()
 						if (ship_position[y_axis] < current_length_max)
 							vertical = 1;
 					break;
+                case ENTER:
+                    x = ship_position[x_axis] + 10*ship_position[y];//position in the array
+                    for(n=0;n<ship_size[i];n++){
+                        if(player_number == player_one){
+                            if(player1[x] != water){
+                                placed =0;
+                                break;
+                            }
+                        }
+                        else {
+                            if(player2[x] != water) {
+                                placed =0;
+                                break;
+                            }
+                        }
+                        placed =1;
+                        if(vertical){//checking by adding to y's
+                            x = x + 10;
+                            if(x > 99){
+                                printf("math error occured");
+                                placed = 0;
+                                break;
+                            }
+                        }
+                        else {
+                            x = x+1;
+                            if(x%10 == 0){
+                                printf("math error occured");
+                                placed = 0;
+                                break;
+                            }
+                        }
+                    }
+                    break;
 				default:
 					break;
 			}
-		}
-		
-		
-	}
-	// player 1 place ships
-	// a,d,s,w to move ships
-	// space bar to rotate ships
-	
-	// player 2 place ships
-	
-	
+        }
+    }//end for
+    //send the board with the ships placed
+    sendGameBoard();
 	
 }
 

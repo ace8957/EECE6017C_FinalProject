@@ -54,7 +54,7 @@ void HEX_PS2(char, char);
  * 	   are controlled by interrupts from the interval timer
 ********************************************************************************/
 
-
+#ifdef SERIAL_SHITS//in globals.h if you want to use
 int main(void)
 {
 	/* Declare volatile pointers to I/O registers (volatile means that IO load
@@ -66,11 +66,11 @@ int main(void)
     unsigned int flags = 0;
     
 
-	/* initialize some variables */
+    /* initialize some variables */
 	byte1 = 0; byte2 = 0; 			// used to hold PS/2 data
 	timeout = 0;										// synchronize with the timer
 
-	/* these variables are used for a blue box and a "bouncing" ALTERA on the VGA screen */
+    /* these variables are used for a blue box and a "bouncing" ALTERA on the VGA screen */
 	int ALT_x1; int ALT_x2; int ALT_y; 
 	int ALT_inc_x; int ALT_inc_y;
 	int blue_x; int blue_y; 
@@ -80,7 +80,7 @@ int main(void)
     
     int keyVal = 0;
 
-	/* set the interval timer period for scrolling the HEX displays */
+    /* set the interval timer period for scrolling the HEX displays */
 	int counter = 0x960000;				// 1/(50 MHz) x (0x960000) ~= 200 msec
 	*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
 	*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
@@ -180,7 +180,7 @@ int main(void)
 		timeout = 0;
 	}
 }
-
+#endif
 /****************************************************************************************
  * Subroutine to send a string of text to the VGA monitor 
 ****************************************************************************************/

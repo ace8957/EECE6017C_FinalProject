@@ -8,27 +8,29 @@
 #define initial_position	0
 
 void reset_player_arrays();
+void place_ships();
 
 extern volatile int player_number;
+extern volatile int game_mode;
 extern volatile int player1[total_board_size];
 extern volatile int player2[total_board_size];
 
 int start_new_game()
 {
     // display startup screen, select player menu
-	// call graphics function
-	
+
 	// select players
 		// either 2 players or 1 player against AI
-		// global variable will hold status of players
-	// number_of_players = graphics_function_return_value
+        // global variable will hold status of players
+    //for now set to 2 player, so game_mode=0
+    game_mode = 0;
 	
 	
-	
-	if (1/*number of players == 2*/){
+    if (game_mode == 0){//check if 2 player or one player if 2 player get the player number else player number is 1 and ai will be 2
 		// player_number = set_player_number(); // function call
 		// enter receive state to wait for users to define player 1
 	}
+    else player_number = 1;
 	
 	// function call to reset arrays
 	reset_player_arrays();	
@@ -36,7 +38,7 @@ int start_new_game()
 	// place ships on screen in turn
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
-		// 
+		//
         receiveGameBoard();
 	}
 	place_ships();
@@ -44,8 +46,7 @@ int start_new_game()
         receiveGameBoard();
     }
 
-	
-	return 0;
+    return 0;
 }
 
 void reset_player_arrays()
@@ -154,7 +155,7 @@ void place_ships()
         }
     }//end for
     //send the board with the ships placed
-    sendGameBoard();
+    //sendGameBoard();
 	
 }
 

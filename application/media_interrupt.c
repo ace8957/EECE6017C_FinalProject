@@ -2,6 +2,8 @@
 #include "globals.h"
 #include "keyboard.h"
 #include "serial.h"
+#include "ui.h"
+#include "graphics.h"
 
 #define SCREEN_WIDTH 319
 #define SCREEN_HEIGHT 239
@@ -116,7 +118,41 @@ int main(void)
 	char_buffer_x = 79; char_buffer_y = 59;
 	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
     
-    
+    /* Test graphics + ui 
+	0 - water
+	2 - miss
+	4 - hit
+	8 - ships
+	*/
+	int boardYours[] = {
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+    };
+	
+	int boardTheirs[] = {
+        0,0,0,0,0,0,0,0,0,0,
+        0,2,0,0,0,0,8,0,0,0,
+        8,0,0,0,0,0,4,0,0,0,
+        8,0,0,0,2,0,4,0,0,0,
+        8,0,0,8,8,0,0,0,8,0,
+        8,0,0,0,2,0,0,0,4,0,
+        2,0,0,0,0,0,0,0,8,0,
+        0,0,8,4,8,8,4,0,0,0,
+        0,0,0,0,0,0,0,2,0,0,
+        0,0,0,0,2,0,0,0,0,0,
+    };
+    drawBox(0, VGA_HEIGHT-20, 20, 20, colorRGB(0, 255, 0));
+    displayBoard(boardYours,0);
+    displayBoard(boardTheirs,1);
+    //while(1);
 	while (1)
 	{
 		while (!timeout)

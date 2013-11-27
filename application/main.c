@@ -13,6 +13,7 @@ int new_game = 1;  // stay zero unless the user decides to start a new game
 extern volatile int player_number;
 	
 /*
+/*
 // main function
 int main()
 {

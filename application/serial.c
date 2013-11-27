@@ -12,7 +12,7 @@
 
 #define RS232_UART_DATA ((volatile int*) 0x10001010)
 #define RS232_UART_READ_DATA ((volatile int*) 0x10001012)
-#define RS232_UART_CONTROL ((volatile int*) (0x10001014))
+#define RS232_UART_CONTROL ((volatile int*) (0x10001010 + 4))
 
 /* API Function: sendGameBoard()
  * 
@@ -25,7 +25,7 @@
  *  SERIAL_SUCCESS - the game board was sent successfuly
  *  SERIAL_FAIL - the game board failed to send.
  */
-int sendGameBoard()
+int sendGameBoard(int *p_GameBoard)
 {
     return SERIAL_SUCCESS;
 }
@@ -40,7 +40,7 @@ int sendGameBoard()
  */
 int* receiveGameBoard(void)
 {
-    return p_GameBoard;
+    return 0;
 } 
 
 // Helper functions
@@ -85,13 +85,13 @@ int rx_Handshake(void) {
 		// if(data_reg != 0 || control_reg != 0x800000)
 			// printf("Data reg: %x, Control reg: %x\n", data_reg, control_reg);
 		if(data_reg != data_reg_old)
-			printf("character: %c\n", (char)data_reg);
+			printf("character: %x\n", data_reg);
 	}
 }
 
 int tx_Handshake(void)
 {
-    unsigned char tx_handshake[] = {'1', '1', '1', '1', '1', '1', '1', '1'};
+    unsigned char tx_handshake[] = {'1','1\n', '\0', '1', '1', '1', '1', '1', '1'};
     unsigned char rx_handshake[] = {'2', '2', '2', '2', '2', '2', '2', '2'};
     unsigned char *pOutput;
     
@@ -103,8 +103,9 @@ int tx_Handshake(void)
          //if room in output buffer
          if((*RS232_UART_CONTROL)&0xffff0000  ) 
          {
+            printf("%x",pOutput);
             //then write the next character
-            *RS232_UART_DATA = (*pOutput++); 
+            *RS232_UART_DATA = (*pOutput++);    
          }
     }
     while(1)

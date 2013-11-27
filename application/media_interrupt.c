@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "keyboard.h"
 #include "serial.h"
+#include "ui.h"
 
 #define SCREEN_WIDTH 319
 #define SCREEN_HEIGHT 239
@@ -116,16 +117,34 @@ int main(void)
 	char_buffer_x = 79; char_buffer_y = 59;
 	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
     
+    int board[100] = {
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2,
+        0,2,4,8,0,2,4,8,0,2
+    };
     
+    //displayBoard(board,0);
+    //displayBoard(board,1);
+    //while(1);
 	while (1)
 	{
 		while (!timeout)
 			;	// wait to synchronize with timer 
 
+            
         VGA_box(blue_x, blue_y, box_len, background_color);
         
         //keyVal = getKey();
-        flags = rx_Handshake();
+        
+        flags = sendSerialMessage('0');
+        //flags = rx_Handshake();
         if (keyVal == UP)
             printf("UP\n");
         else if (keyVal == DOWN)

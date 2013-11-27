@@ -7,6 +7,7 @@
 #define initial_position	0
 
 void reset_player_arrays();
+void place_ships();
 
 extern volatile int player_number;
 extern volatile int player1[total_board_size];
@@ -35,7 +36,7 @@ int start_new_game()
 	// place ships on screen in turn
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
-		// 
+		//
 	}
 	place_ships();
 	
@@ -112,13 +113,8 @@ void place_ships()
 		
 		
 	}
-	// player 1 place ships
-	// a,d,s,w to move ships
-	// space bar to rotate ships
 	
-	// player 2 place ships
-	
-	
+	// send array to other game board	
 	
 }
 

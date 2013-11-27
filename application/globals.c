@@ -12,24 +12,24 @@ volatile int timeout;								// used to synchronize with the timer
 
 /*boards*/
 
-volatile int myBoard[board_size];
-volatile int opBoard[board_size];
+volatile int myBoard[total_board_size];
+volatile int opBoard[total_board_size];
 
 
 volatile int player_number = 1; // default player 1
 
 /*
 	array element defines:
-	0-9:	row A columns 1-10
-	10-19:	row B columns 1-10
-	20-29:	row C columns 1-10
-	30-39:	row D columns 1-10
-	40-49:	row E columns 1-10
-	50-59:	row F columns 1-10
-	60-69:	row G columns 1-10
-	70-79:	row H columns 1-10
-	80-89:	row I columns 1-10
-	90-99:	row J columns 1-10
+	0-9:	row A columns 0-9
+	10-19:	row B columns 10-19
+	20-29:	row C columns 20-29
+	30-39:	row D columns 30-39
+	40-49:	row E columns 40-49
+	50-59:	row F columns 50-59
+	60-69:	row G columns 60-69
+	70-79:	row H columns 70-79
+	80-89:	row I columns 80-89
+	90-99:	row J columns 90-99
 	
 	element 100 bits:
 	0-4:	00000 carrier hits

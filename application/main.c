@@ -10,7 +10,9 @@
 #include "setup.h"
 
 int new_game = 1;  // stay zero unless the user decides to start a new game
-
+extern volatile int player_number;
+	
+/*
 // main function
 int main()
 {
@@ -41,9 +43,22 @@ int main()
 		}
 		
 		// player one take turn
-		
+		if (player_number == player_two){
+			receiveGameBoard();
+		}
+		if (player_number == player_one){
+			getKey();
+			//sendGameBoard();
+		}
 		
 		// player 2 take turn
+		if (player_number == player_one){
+			receiveGameBoard();
+		}		
+		if (player_number == player_two){
+			getKey();
+			//sendGameBoard();
+		}
 		
 		// game end, quit, or restart
 		
@@ -51,3 +66,4 @@ int main()
 	
 	return 0;
 }
+*/

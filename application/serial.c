@@ -25,7 +25,7 @@
  *  SERIAL_SUCCESS - the game board was sent successfuly
  *  SERIAL_FAIL - the game board failed to send.
  */
-int sendGameBoard()
+int sendGameBoard(int *p_GameBoard)
 {
     return SERIAL_SUCCESS;
 }
@@ -40,7 +40,7 @@ int sendGameBoard()
  */
 int* receiveGameBoard(void)
 {
-    return p_GameBoard;
+    return 0;
 } 
 
 // Helper functions

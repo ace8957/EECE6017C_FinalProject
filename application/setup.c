@@ -11,7 +11,7 @@ void reset_player_arrays();
 void place_ships();
 
 extern volatile int player_number;
-extern volatile int game_mode;
+volatile int game_mode = 0;
 extern volatile int player1[total_board_size];
 extern volatile int player2[total_board_size];
 

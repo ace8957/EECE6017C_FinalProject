@@ -11,7 +11,7 @@
 #include "globals.h"
 
 #define RS232_UART_DATA ((volatile int*) 0x10001010)
-#define RS232_UART_READ_DATA ((volatile int*) 0x10001013)
+#define RS232_UART_READ_DATA ((volatile int*) 0x10001012)
 #define RS232_UART_CONTROL ((volatile int*) (0x10001014))
 
 /* API Function: sendGameBoard()
@@ -73,15 +73,33 @@ int sendSerialMessage(unsigned char msg)
     }
 	return 1;
 }*/
+int alt_up_rs232_check_parity(unsigned int data_reg)
+{
+	unsigned parity_error = (data_reg & 0x00000200) >> 9;
+	return (parity_error ? -1 : 0);
+}
 
 int rx_Handshake(void) {
 	unsigned int data_reg;
 	unsigned int data_reg_old;
+    unsigned char *data;
 	unsigned int control_reg;
     unsigned int pe = 0;
+    int retVal;
+    
+    data_reg = __builtin_ldwio(RS232_UART_DATA);
+    *data = (data_reg & 0x000001FF);
+    retVal = ((data_reg & 0x00008000) >> 15) - 1;
+    pe = alt_up_rs232_check_parity(data_reg);
+    if (retVal != -1) {
+        printf("data_reg: %h\n", data_reg);
+        printf("character: %c\n", (char)(*data));
+        printf("parity: %d\n", pe);
+    }
+    /*
 	while(1) {
 		data_reg_old = data_reg;
-		data_reg = ((*RS232_UART_READ_DATA) & 0x7F);
+		data_reg = ((*RS232_UART_READ_DATA) & 0x1FF);
         pe = ((*RS232_UART_DATA) & 0x100);
 		control_reg = (*RS232_UART_CONTROL);
 		// if(data_reg != 0 || control_reg != 0x800000)
@@ -91,11 +109,11 @@ int rx_Handshake(void) {
             printf("RS232_UART_DATA: %x\n", (*RS232_UART_DATA));
             printf("RS232_UART_READ_DATA: %x\n", (*RS232_UART_READ_DATA));
 			printf("character: %c\n", (char)data_reg);  
-            *RS232_UART_READ_DATA = (*RS232_UART_READ_DATA)*0x80;            
+            *RS232_UART_READ_DATA = (*RS232_UART_READ_DATA)&0x80;            
         }
         if (pe != 0)
             printf("PE = 1\n");
-	}
+	*/
 }
 
 int tx_Handshake(void)

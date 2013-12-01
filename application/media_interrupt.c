@@ -149,9 +149,9 @@ int main(void)
         0,0,0,0,0,0,0,2,0,0,
         0,0,0,0,2,0,0,0,0,0,
     };
-    drawBox(0, VGA_HEIGHT-20, 20, 20, colorRGB(0, 255, 0));
-    displayBoard(boardYours,0);
-    displayBoard(boardTheirs,1);
+    //drawBox(0, VGA_HEIGHT-20, 20, 20, colorRGB(0, 255, 0));
+    //displayBoard(boardYours,0);
+    //displayBoard(boardTheirs,1);
     //while(1);
 	while (1)
 	{

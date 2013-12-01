@@ -33,4 +33,6 @@
 #define player_one 1
 #define player_two 2
 
+#define SERIAL_SHITS 1
+
 #endif //GLOBALS_H

@@ -116,14 +116,42 @@ int rx_Handshake(void) {
 	*/
 }
 
+unsigned rs232_get_available_space_in_write_FIFO(void)
+{
+	unsigned char ctrl_reg;
+	ctrl_reg = __builtin_ldwio((void *)(((unsigned char*)RS232_UART_DATA) + ((1) * (32/8)))); 
+	return (ctrl_reg & 0xFFFF0000) >> 16;
+}
+/*
+unsigned alt_up_rs232_get_used_space_in_read_FIFO(alt_up_rs232_dev *rs232)
+{
+	alt_u16 ravail = 0;
+	// we can only read the 16 bits for RAVAIL --- a read of DATA will discard the data
+//	ravail = IORD_16DIRECT(IOADDR_ALT_UP_RS232_DATA(rs232->base), 2); 
+	ravail = IORD_ALT_UP_RS232_RAVAIL(rs232->base); 
+//	return ravail;
+	return (ravail & ALT_UP_RS232_RAVAIL_MSK) >> ALT_UP_RS232_RAVAIL_OFST;
+}
+*/
+
+
 int tx_Handshake(void)
 {
-    unsigned char tx_handshake[] = {0x31,0, 0x31, 0, 0x31, 0, 0x31, 0};
+    unsigned char tx_handshake[] = {'a','b','c','d','e','f','\0'};
     unsigned char rx_handshake[] = {'2', '2', '2', '2', '2', '2', '2', '2'};
-    unsigned char *pOutput;
+    unsigned char *pOutput, *data;
     
     unsigned int count = 0;
+
+    data = tx_handshake;
+    while(*data) {
+        // we can write directly without thinking about other bit fields for this
+        // case ONLY, because only DATA field of the data register is writable
+        __builtin_stwio(RS232_UART_DATA, (*data));
+        *data++;
+    }
     
+    /*
     while(1)
     {
     pOutput = tx_handshake;
@@ -151,5 +179,6 @@ int tx_Handshake(void)
             return 0;
         }
     }
+    */
     return 1;
 }

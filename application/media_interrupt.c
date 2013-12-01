@@ -64,6 +64,7 @@ int main(void)
 	volatile int * KEY_ptr = (int *) 0x10000050;					// pushbutton KEY address
 	volatile int * PS2_ptr = (int *) 0x10000100;					// PS/2 port address
     unsigned int flags = 0;
+    unsigned availSpace = 0;
     
 
     /* initialize some variables */
@@ -161,7 +162,7 @@ int main(void)
         VGA_box(blue_x, blue_y, box_len, background_color);
         
         //keyVal = getKey();
-        flags = rx_Handshake();
+        flags = tx_Handshake();
         if (keyVal == UP)
             printf("UP\n");
         else if (keyVal == DOWN)

@@ -12,5 +12,6 @@ int* receiveGameBoard(void);
 int sendSerialMessage(unsigned char);
 int tx_Handshake(void);
 int rx_Handshake(void);
+unsigned rs232_get_available_space_in_write_FIFO(void);
 
 #endif //SERIAL_H

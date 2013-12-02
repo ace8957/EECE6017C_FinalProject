@@ -1,7 +1,15 @@
 #include "graphics.h"
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 
 struct color colorRGB(unsigned char red, unsigned char green, unsigned char blue)
+
 {
     struct color c = {
         .red = red,

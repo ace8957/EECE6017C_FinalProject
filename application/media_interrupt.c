@@ -54,9 +54,90 @@ void HEX_PS2(char, char);
  * 	   are controlled by interrupts from the interval timer
 ********************************************************************************/
 
+#ifdef SERIAL_SHITS//in globals.h if you want to use
+int main(void)
+{
+	/* Declare volatile pointers to I/O registers (volatile means that IO load
+	   and store instructions will be used to access these pointer locations, 
+	   instead of regular memory loads and stores) */
+	volatile int * interval_timer_ptr = (int *) 0x10002000;	// interal timer base address
+	volatile int * KEY_ptr = (int *) 0x10000050;					// pushbutton KEY address
+	volatile int * PS2_ptr = (int *) 0x10000100;					// PS/2 port address
+    unsigned int flags = 0;
+    unsigned availSpace = 0;
+    
+
+    /* initialize some variables */
+	byte1 = 0; byte2 = 0; 			// used to hold PS/2 data
+	timeout = 0;										// synchronize with the timer
+
+    /* these variables are used for a blue box and a "bouncing" ALTERA on the VGA screen */
+	int ALT_x1; int ALT_x2; int ALT_y; 
+	int ALT_inc_x; int ALT_inc_y;
+	int blue_x; int blue_y; 
+	int screen_x; int screen_y; int char_buffer_x; int char_buffer_y;
+	short color;
+    const short background_color = 0x1863;
+    
+    int keyVal = 0;
+
+    /* set the interval timer period for scrolling the HEX displays */
+	int counter = 0x960000;				// 1/(50 MHz) x (0x960000) ~= 200 msec
+	*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
+	*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
+
+	/* start interval timer, enable its interrupts */
+	*(interval_timer_ptr + 1) = 0x7;	// STOP = 0, START = 1, CONT = 1, ITO = 1 
+	
+	*(KEY_ptr + 2) = 0xE; 			/* write to the pushbutton interrupt mask register, and
+											 * set 3 mask bits to 1 (bit 0 is Nios II reset) */
+
+	*(PS2_ptr) = 0xFF; 				/* reset */
+	*(PS2_ptr + 1) = 0x1; 			/* write to the PS/2 Control register to enable interrupts */
+
+	NIOS2_WRITE_IENABLE( 0xC3 );	/* set interrupt mask bits for levels 0 (interval
+											 * timer), 1 (pushbuttons), 6 (audio), and 7 (PS/2) */
+
+	NIOS2_WRITE_STATUS( 1 );		// enable Nios II interrupts
+
+	/* create a messages to be displayed on the VGA display */
+	char text_top_VGA[20] = "Altera DE1\0";
+	char text_bottom_VGA[20] = "Media Computer\0";
+	char text_ALTERA[10] = "Altera\0";
+	char text_erase[10] = "      \0";
 
 
-int main(void){
+	/* the following variables give the size of the pixel buffer */
+	screen_x = SCREEN_WIDTH; screen_y = SCREEN_HEIGHT;
+	color = 0x1863;		// a dark grey color
+	fill_screen (0, 0, screen_x, screen_y, color);	// fill the screen with grey
+    // draw a medium-blue box around the above text, based on the character buffer coordinates
+	blue_x = 28; blue_y = 26;
+	// character coords * 4 since characters are 4 x 4 pixel buffer coords (8 x 8 VGA coords)
+	color = 0x187F;		// a medium blue color
+
+	char_buffer_x = 79; char_buffer_y = 59;
+	ALT_x1 = 0; ALT_x2 = 5/* ALTERA = 6 chars */; ALT_y = 0; ALT_inc_x = 0; ALT_inc_y = -4;
+    
+    /* Test graphics + ui 
+	0 - water
+	2 - miss
+	4 - hit
+	8 - ships
+	*/
+	int boardYours[] = {
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+    };
+	
 	int boardTheirs[] = {
         0,0,0,0,0,0,0,0,0,0,
         0,2,0,0,0,0,8,0,0,0,
@@ -69,25 +150,38 @@ int main(void){
         0,0,0,0,0,0,0,2,0,0,
         0,0,0,0,2,0,0,0,0,0,
     };
-		int boardYours[] = {
-        0,0,0,0,0,0,0,0,0,0,
-        0,2,0,0,0,0,8,0,0,0,
-        8,0,0,0,0,0,4,0,0,0,
-        8,0,0,0,2,0,4,0,0,0,
-        8,0,0,8,8,0,0,0,8,0,
-        8,0,0,0,2,0,0,0,4,0,
-        2,0,0,0,0,0,0,0,8,0,
-        0,0,8,4,8,8,4,0,0,0,
-        0,0,0,0,0,0,0,2,0,0,
-        0,0,0,0,2,0,0,0,0,0,
-    };
     //drawBox(0, VGA_HEIGHT-20, 20, 20, colorRGB(0, 255, 0));
-		drawBox(0,0,VGA_WIDTH, VGA_HEIGHT, colorRGB(0,0,0));
-		displayBoard(boardYours,0);
-		displayBoard(boardTheirs,1);
-	    while(1){}
-	return 0;
+    //displayBoard(boardYours,0);
+    //displayBoard(boardTheirs,1);
+    //while(1);
+	while (1)
+	{
+		while (!timeout)
+			;	// wait to synchronize with timer 
+
+        VGA_box(blue_x, blue_y, box_len, background_color);
+        
+        //keyVal = getKey();
+        flags = tx_Handshake();
+        if (keyVal == UP)
+            printf("UP\n");
+        else if (keyVal == DOWN)
+            printf("DOWN\n");
+        else if (keyVal == RIGHT)
+            printf("RIGHT\n");
+        else if (keyVal == LEFT)
+            printf("LEFT\n");
+
+		/* display PS/2 data (from interrupt service routine) on HEX displays */
+		/*if(change == 1)
+		{
+			change = 0;
+			VGA_subStrn(0, 0, kbBuf, kbBufBegin, kbBufEnd, KB_BUF_SIZE);
+		}*/
+		timeout = 0;
+	}
 }
+#endif
 /****************************************************************************************
  * Subroutine to send a string of text to the VGA monitor 
 ****************************************************************************************/

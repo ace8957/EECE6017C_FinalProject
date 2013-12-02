@@ -111,14 +111,14 @@ void displayBoard(int board[], int yourBoard)
     int top = 0;
     int left = 0;
     int textWidthSpace = 10;
-    const char *rows[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-    const char *cols[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    const char *cols[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+    const char *rows[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     if(yourBoard){
         x = left = 1;
         y = top = 1;
     } else {
         x = left = dimension + 3*textWidthSpace + 1;
-        y = top = dimension - 60 + 1;
+        y = top = dimension - 50 + 1;
         dimension = 160;
     }  
     
@@ -130,14 +130,14 @@ void displayBoard(int board[], int yourBoard)
     // Loop through the board array and color individual squares accordingly
     int i = 0;
     for(i = 0; i<100; ++i){
-        // Reset x & y coordinates for a new row
+        // Reset x & y corrdinates for a new row
         if(i%10 == 0){
             if(i > 9) {
                 x = left;
-                y += square + 2;
+                y += square + 1;
             }
             if(!yourBoard)
-                drawText(x-textWidthSpace, y+textWidthSpace+textWidthSpace/4, rows[i/10]);
+                drawText(x-2*textWidthSpace, y+textWidthSpace+textWidthSpace/4, rows[i/10]);
         }
         if(i <= 9 && !yourBoard) {
            drawText(x+textWidthSpace/2, y-textWidthSpace, cols[i]); 

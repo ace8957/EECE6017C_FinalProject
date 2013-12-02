@@ -8,8 +8,6 @@
 #include "serial.h"
 #include "game.h"
 #include "setup.h"
-
-int new_game = 1;  // stay zero unless the user decides to start a new game
 extern volatile int player_number;
 	
 #ifndef SERIAL_SHITS
@@ -17,9 +15,7 @@ extern volatile int player_number;
 int main()
 {
     int new_game = 1;     // stay zero unless the user decides to start a new game
-	int player_count = 1; // default, 1 for AI 2 for 2 player
-	int player_turn = 0;  // 0 for player 1, 1 for player 2 or AI
-	
+    int game_mode = 0;
 	
 	// add setup instructions here
 	// initialize serial, vga, ps/2, etc
@@ -29,15 +25,10 @@ int main()
 	// to be sending first or receiving first.  this will let it be the same all the time...
 	// at least at first.
 	
-	
-    // 	initial program start / restart	
-	player_count = start_new_game(); // call the function to setup a new game, reset new game flag
-	new_game = 0; // reset new game flag
-    
 	// main program loop
 	while (1){
         if (new_game){
-            player_count = start_new_game(); // call the function to setup a new game, reset new game flag
+            game_mode = start_new_game(); // call the function to setup a new game, reset new game flag
 			new_game = 0; // reset new game flag
 			// function call to reset arrays
 		}
@@ -45,20 +36,29 @@ int main()
 		// player one take turn
 		if (player_number == player_two){
 			receiveGameBoard();
-		}
-		if (player_number == player_one){
-			getKey();
-			//sendGameBoard();
+        }
+        if (player_number == player_one){
+            //player one takes turn
+            take_turn();
+            check_status();
 		}
 		
 		// player 2 take turn
 		if (player_number == player_one){
-			receiveGameBoard();
+            if(game_mode == PLAYER){
+                //player 2 waits for ai or human 2
+                receiveGameBoard();
+            }
+            else {
+                //ai takes turn
+                //ai_make_move();
+            }
 		}		
 		if (player_number == player_two){
-			getKey();
-			//sendGameBoard();
-		}
+            //do player moves
+            take_turn();
+            check_status();
+        }
 		
 		// game end, quit, or restart
 		

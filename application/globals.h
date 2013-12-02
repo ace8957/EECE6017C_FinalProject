@@ -1,8 +1,6 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H 1
 
-//#define SERIAL_SHITS
-
 #define KB_BUF_SIZE     256     // Maximum size of the keyboard buffer
 
 //ship sizes
@@ -33,6 +31,10 @@
 #define player_one 1
 #define player_two 2
 
-#define SERIAL_SHITS 1
+//define game mode
+#define AI 0
+#define PLAYER 1
+
+//#define SERIAL_SHITS 1
 
 #endif //GLOBALS_H

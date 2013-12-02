@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "keyboard.h"
 #include "serial.h"
+#include "ui.h"
 
 #define initial_position	0
 
@@ -11,10 +12,14 @@ void reset_player_arrays();
 void place_ships();
 
 extern volatile int player_number;
-volatile int game_mode = 0;
 extern volatile int player1[total_board_size];
 extern volatile int player2[total_board_size];
 
+volatile int game_mode = 0;
+/**
+ * @brief start_new_game - used to start up a new game
+ * @return returns the number of players 1 for one player with ai and 2 for serial comm
+ */
 int start_new_game()
 {
     // display startup screen, select player menu
@@ -23,30 +28,41 @@ int start_new_game()
 		// either 2 players or 1 player against AI
         // global variable will hold status of players
     //for now set to 2 player, so game_mode=0
-    game_mode = 0;
+    int menu_return = UI_MENU_ESCAPE;
+    do{
+        game_mode = displayMenu("select game mode",PLAYER,AI);
+    } while(game_mode == menu_return);
 	
-	
-    if (game_mode == 0){//check if 2 player or one player if 2 player get the player number else player number is 1 and ai will be 2
-		// player_number = set_player_number(); // function call
+    if (game_mode == PLAYER){//check if 2 player or one player if 2 player get the player number else player number is 1 and ai will be 2
+        int space = SPACE, enter = ENTER;
+        do{
+        player_number =displayMenu("select player number",SPACE, ENTER); // set_player_number(); // function call
+        }while(player_number != space || player_number != enter);
 		// enter receive state to wait for users to define player 1
 	}
-    else player_number = 1;
+    else player_number = 1;//ai mode
 	
 	// function call to reset arrays
 	reset_player_arrays();	
 	
-	// place ships on screen in turn
+    // place ships on screen in turn
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
 		//
         receiveGameBoard();
 	}
 	place_ships();
+   // if(game_mode == PLAYER) sendGameBoard();
+
     if(player_number == player_one){
-        receiveGameBoard();
+        if(game_mode == PLAYER) receiveGameBoard();
+        else {
+            //initialize_ai();
+            //ai_place_ships();
+        }
     }
 
-    return 0;
+    return game_mode;
 }
 
 void reset_player_arrays()
@@ -154,21 +170,18 @@ void place_ships()
 			}
         }
     }//end for
-    //send the board with the ships placed
-    //sendGameBoard();
-	
 }
 
-/*
+
 int set_player_number()
 {
+    int value;
 	while (1){
-		if (space)
-			return 1;
-		else if (serial receive)
-			return 2;
+        value = getKey();
+        if(value == SPACE) return player_one;
+        else if(value == ESC) return player_two;
 	}
-	return 1;
+    return -1;//error occured
 }
 
-*/
+

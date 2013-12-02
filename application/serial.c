@@ -81,21 +81,47 @@ int alt_up_rs232_check_parity(unsigned int data_reg)
 
 int rx_Handshake(void) {
 	unsigned int data_reg;
-	unsigned int data_reg_old;
     unsigned char *data;
-	unsigned int control_reg;
     unsigned int pe = 0;
     int retVal;
+    int messageRecieved = 0;
+    unsigned char tx_handshake[] = {'t','r','a','n','s','m','i','t','\n','\0'};
+    unsigned char rx_handshake[] = {'r', 'e', 'c', 'e', 'i', 'v', 'e'};
+    int count = 0;
     
-    data_reg = __builtin_ldwio(RS232_UART_DATA);
-    *data = (data_reg & 0x000001FF);
-    retVal = ((data_reg & 0x00008000) >> 15) - 1;
-    pe = alt_up_rs232_check_parity(data_reg);
-    if (retVal != -1) {
-        printf("data_reg: %h\n", data_reg);
-        printf("character: %c\n", (char)(*data));
-        printf("parity: %d\n", pe);
+    while (messageRecieved == 0)
+    {
+        data_reg = __builtin_ldwio(RS232_UART_DATA);
+        *data = (data_reg & 0x000001FF);
+        retVal = ((data_reg & 0x00008000) >> 15) - 1;
+        pe = alt_up_rs232_check_parity(data_reg);
+        if (retVal != -1) {
+            if (((char)rx_handshake[count]) == ((char)*data))
+            {
+                count++;
+                if (count == 7)
+                    messageRecieved = 1;
+            }
+            else
+            {
+                count = 0;
+            }
+            
+            printf("data_reg: %h\n", data_reg);
+            printf("character: %c\n", (char)(*data));
+            printf("parity: %d\n", pe);
+        }
     }
+    // The handshake has been established so lets send a message back to the computer 
+    data = tx_handshake;
+    while(*data) {
+        // we can write directly without thinking about other bit fields for this
+        // case ONLY, because only DATA field of the data register is writable
+        __builtin_stwio(RS232_UART_DATA, (*data));
+        *data++;
+    }
+    // We should be done here so we can continue on
+    
     /*
 	while(1) {
 		data_reg_old = data_reg;
@@ -137,18 +163,47 @@ unsigned alt_up_rs232_get_used_space_in_read_FIFO(alt_up_rs232_dev *rs232)
 
 int tx_Handshake(void)
 {
-    unsigned char tx_handshake[] = {'a','b','c','d','e','f','\0'};
-    unsigned char rx_handshake[] = {'2', '2', '2', '2', '2', '2', '2', '2'};
-    unsigned char *pOutput, *data;
-    
-    unsigned int count = 0;
+    unsigned int data_reg;
+    unsigned char *data;
+    unsigned int pe = 0;
+    int retVal;
+    int messageRecieved = 0;
+    unsigned char tx_handshake[] = {'t','r','a','n','s','m','i','t','\n','\0'};
+    unsigned char rx_handshake[] = {'r', 'e', 'c', 'e', 'i', 'v', 'e'};
+    int count = 0;
 
+    // First thing we want to do is to send our tx handshake message to the computer.
     data = tx_handshake;
     while(*data) {
         // we can write directly without thinking about other bit fields for this
         // case ONLY, because only DATA field of the data register is writable
         __builtin_stwio(RS232_UART_DATA, (*data));
         *data++;
+    }
+    
+    // If the the computer reads the message correctly then it will send us a message back.
+    while (messageRecieved == 0)
+    {
+        data_reg = __builtin_ldwio(RS232_UART_DATA);
+        *data = (data_reg & 0x000001FF);
+        retVal = ((data_reg & 0x00008000) >> 15) - 1;
+        pe = alt_up_rs232_check_parity(data_reg);
+        if (retVal != -1) {
+            if (((char)rx_handshake[count]) == ((char)*data))
+            {
+                count++;
+                if (count == 7)
+                    messageRecieved = 1;
+            }
+            else
+            {
+                count = 0;
+            }
+            
+            printf("data_reg: %h\n", data_reg);
+            printf("character: %c\n", (char)(*data));
+            printf("parity: %d\n", pe);
+        }
     }
     
     /*

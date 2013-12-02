@@ -154,6 +154,8 @@ int main(void)
     //displayBoard(boardYours,0);
     //displayBoard(boardTheirs,1);
     //while(1);
+    flags = rx_Handshake();
+    printf("rx_Handshake established!\n");
 	while (1)
 	{
 		while (!timeout)
@@ -162,7 +164,7 @@ int main(void)
         VGA_box(blue_x, blue_y, box_len, background_color);
         
         //keyVal = getKey();
-        flags = tx_Handshake();
+        
         if (keyVal == UP)
             printf("UP\n");
         else if (keyVal == DOWN)

@@ -17,15 +17,15 @@
 */
 int boardYours[] = {
     0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
+    0,2,0,0,0,0,8,0,0,0,
+    8,0,0,0,0,0,4,0,0,0,
+    8,0,0,0,2,0,4,0,0,0,
+    8,0,0,8,8,0,0,0,8,0,
+    8,0,0,0,2,0,0,0,4,0,
+    2,0,0,0,0,0,0,0,8,0,
+    0,0,8,4,8,8,4,0,0,0,
+    0,0,0,0,0,0,0,2,0,0,
+    0,0,0,0,2,0,0,0,0,0,
 };
 
 int boardTheirs[] = {
@@ -69,9 +69,11 @@ void render(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     if(dispToggle) {
+        drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(0, 0, 0));
         displayMenu("Menu", 4, "Option 1", "Option 2", "Option 3", "Option 4");
     }
     else {
+        drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(0, 0, 0));
         displayBoard(boardYours,1);
         displayBoard(boardTheirs,0);
     }

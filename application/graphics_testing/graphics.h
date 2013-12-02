@@ -13,7 +13,7 @@ struct color
 
 #define COLOR_HIT colorRGB(255, 0, 0)
 
-#define COLOR_MISS colorRGB(255, 255, 0)
+#define COLOR_MISS colorRGB(255, 255, 255)
 
 #define COLOR_WATER colorRGB(0, 0, 255)
 

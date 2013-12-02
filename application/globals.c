@@ -39,5 +39,5 @@ volatile int player_number = 1; // default player 1
 	20-24:	XXX00 destroyer hits
 	25-31;	XXXXXXX undefined
 */
-volatile int player1[total_board_size];
-volatile int player2[total_board_size];
+int player1[total_board_size];
+int player2[total_board_size];

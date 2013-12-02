@@ -9,9 +9,9 @@
  */
 inline short colorAsShort(struct color c)
 {
-    unsigned int redComponent = ((unsigned int)c.red*32)/255;
-    unsigned int greenComponent = ((unsigned int)c.green*64)/255;
-    unsigned int blueComponent = ((unsigned int)c.blue*32)/255;
+    unsigned int redComponent = ((unsigned int)c.red*31)/255;
+    unsigned int greenComponent = ((unsigned int)c.green*63)/255;
+    unsigned int blueComponent = ((unsigned int)c.blue*31)/255;
     short ret = (redComponent&0x1F)<<(11) | (greenComponent&0x3F)<<(5) | (blueComponent&0x1F);
     return ret;
 }
@@ -28,6 +28,8 @@ inline struct color colorRGB(unsigned char red, unsigned char green, unsigned ch
 
 void drawText(int x, int y, const char * text_ptr)
 {
+	x /= 4;
+	y /= 4;
 	int offset;
   	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
 	/* assume that the text string fits on one line */
@@ -53,7 +55,6 @@ void drawBox(int x, int y, int width, int height, struct color c)
             // From this calculation, it appears that the pixel buffer is laid out as 320 rows of 512 columns
 			offset = (row << 9) + col;
 			*(pixel_buffer + offset) = colorAsShort(c);	// compute halfword address, set pixel
-			++col;
 		}
 	}
 }

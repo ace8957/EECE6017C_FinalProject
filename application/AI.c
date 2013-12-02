@@ -1,4 +1,5 @@
 #include "globals.h"
+#include <string.h>
 
 /*
 	The AI will operate on the board which is passed to itself.
@@ -40,9 +41,17 @@
 #define IS_HIT 1
 #define IS_MISS 0
 #define SHIP_MASK 0xF8
+#define NONE 999
+
+//externs
+extern int player1[total_board_size];
+extern int player2[total_board_size];
 
 //Local Globals variables
-volatile int ai_game_board[total_board_size-1];
+int ai_game_board[total_board_size-1];
+int locality_count = 0;//used to determine the next attack direction when searching around a 
+int last_attack = NONE;
+int last_hit = NONE;
 
 int initialize_ai(void) {
 	//we must set the initial values of our internal game board to 0
@@ -51,7 +60,23 @@ int initialize_ai(void) {
 }
 
 //board - the master copy of the board, probably player2[] from globals.c
-int ai_place_ships(int * board) {}
+int ai_place_ships(void) {
+	//TODO: get rid of this hard code
+	int tmp_board[] = {
+        8,8,8,8,8,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        16,0,0,0,0,0,0,64,0,0,
+        16,0,0,0,0,0,0,64,0,0,
+        16,0,0,0,0,0,0,64,0,0,
+        16,0,0,0,0,0,0,0,0,0,
+        0,0,0,32,32,32,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,128,
+        0,0,0,0,0,0,0,0,0,128,
+    };
+	memcpy(player2, tmp_board, sizeof(tmp_board));
+	return 0;
+}
 
 int get_random_index(void) {
 	int r;
@@ -65,19 +90,19 @@ int get_random_index(void) {
 }
 
 //board - the master copy of the board, probably player2[] from globals.c
-int ai_check_hit(int * board, int index) {
-	if(board[index] & SHIP_MASK)
+int ai_check_hit(int index) {
+	if(player1[index] > hit)
 		return IS_HIT;
 	else
 		return IS_MISS;
 }
 
 //board - the master copy of the board, probably player2[] from globals.c
-void ai_make_attack(int * board, int index) {
-	if(ai_check_hit(board, index)) {
+void ai_make_attack(int index) {
+	if(ai_check_hit(index)) {
 		//set the hit flag in the master board
 		//FIXME: are we doing bitflags or assigned values?
-		board[index] = hit;//that's a global define from globals.h
+		player2[index] = hit;//that's a global define from globals.h
 		
 		//set the flag in the ai-only board that is used to make decisions
 		ai_game_board[index] = IS_HIT;
@@ -85,9 +110,27 @@ void ai_make_attack(int * board, int index) {
 	else {
 		//set the miss flag in the master board
 		//FIXME: are we doing bitflags or assigned values?
-		board[index] = miss;//that's a global define from globals.h
+		player2[index] = miss;//that's a global define from globals.h
 		
 		//set the flag in the ai-only board that is used to make decisions
 		ai_game_board[index] = IS_MISS;
+	}
+}
+
+int ai_get_attack_direction(void) {
+	
+}
+
+void ai_make_move(void) {
+	int attack_index = NONE;
+	
+	//check if this is our first move
+	if(last_attack == NONE && last_hit == NONE) {
+		//it's our first move, so pick a random index to attack
+		attack_index = get_random_index();
+	}
+	else {
+		//it's not our first move, check to see if we have gotten a last hit
+		//use a counter to check cardinal directions
 	}
 }

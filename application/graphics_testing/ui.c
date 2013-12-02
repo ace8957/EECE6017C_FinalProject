@@ -112,7 +112,7 @@ void displayBoard(int board[], int yourBoard)
     int left = 0;
     int textWidthSpace = 10;
     const char *cols[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-    const char *rows[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    const char *rows[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     if(yourBoard){
         x = left = 1;
         y = top = 1;
@@ -137,10 +137,10 @@ void displayBoard(int board[], int yourBoard)
                 y += square + 1;
             }
             if(!yourBoard)
-                drawText(x-2*textWidthSpace, y+textWidthSpace+textWidthSpace/4, rows[i/10]);
+                drawText(x-textWidthSpace, y+textWidthSpace+textWidthSpace/4, cols[i/10]);
         }
         if(i <= 9 && !yourBoard) {
-           drawText(x+textWidthSpace/2, y-textWidthSpace, cols[i]); 
+           drawText(x+textWidthSpace/2, y-textWidthSpace, rows[i]); 
         }
 
         // Water - Red

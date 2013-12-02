@@ -5,6 +5,21 @@
 #include "graphics.h"
 #include "keyboard.h"
 
+/**
+ * The text drawn by the drawText function is 8x8 pixels for every
+ * character.
+ *
+ * ------------------------------------------------------------
+ * |                         Title                            |
+ * |    __________________________________________________    |
+ * |   |__________________________________________________|   |
+ * |   ||                  Option #1                     ||   |
+ * |   |--------------------------------------------------|   |
+ * |   ----------------------------------------------------   |
+ * |    __________________________________________________    |
+ * |    |                  Option #2                     |    |
+ * |    --------------------------------------------------    |
+ */
 int displayMenu(const char *title, unsigned int numOptions, ...)
 {
     int selection = 1;
@@ -19,13 +34,21 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
     }
     va_end(options);
 
+    // User wants to display a message box
+    if(numOptions == 0) {
+        strncpy(optionList[0], "Okay", 256);
+        numOptions = 1;
+    }
+
     // Draw the menu background in dark gray
     drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(30, 30, 30));
 
     // Calculate the outermost menubox width and height
-    const int optionBoxHeight = 10,
+    const int optionBoxHeight = 12,
               optionBoxSeparation = 4,
-              optionBoxWidth = 150;
+              optionBoxWidth = 150,
+              charWidth = 8,
+              charHeight = 8;
     int menuWidth = 200;
     int menuHeight = (numOptions+1)*(optionBoxHeight+optionBoxSeparation);
 
@@ -35,27 +58,25 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
     drawBox(menuX, menuY, menuWidth, menuHeight, colorRGB(11, 10, 177));
     
     // Draw the title
-    drawText(menuX+10, menuY+10, title);
+    int textLen = strlen(title)*charWidth;
+    int optionX = menuX+(menuWidth-textLen)/2,
+        optionY = menuY+(optionBoxHeight+optionBoxSeparation)/2;
+    drawText(optionX, optionY, title);
    
-    // User wants to display a message box
-    if(numOptions == 0) {
-        strncpy(optionList[0], "Okay", 256);
-        numOptions = 1;
-    }
-
     int keyPress;
-    int optionX = (menuX+menuWidth-optionBoxWidth)/2,
-        optionY;
     do {
         // Draw the selection background
-        optionY = menuY+selection*optionBoxHeight - (optionBoxSeparation/2);
-        drawBox(optionX, optionY, optionBoxWidth, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
+        optionX = menuX+(menuWidth-optionBoxWidth)/2;
+        optionY = menuY+selection*optionBoxHeight + (optionBoxSeparation/2);
+        drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
 
+        optionX = menuX+(menuWidth-optionBoxWidth+optionBoxSeparation)/2;
         // Draw the options in their own boxes, with the first option highlighted
         for(i = 0; i < numOptions; ++i) {
-            optionY = menuY+selection*optionBoxHeight;
-            drawBox(optionX, optionY, optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
-            drawText(optionX+10, optionY+(optionBoxHeight/2), optionList[i]);
+            textLen = strlen(optionList[i])*charWidth;
+            optionY = menuY+(i+1)*(optionBoxHeight+optionBoxSeparation/2);
+            drawBox(optionX, optionY+(optionBoxSeparation/2), optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
+            drawText(optionX+(optionBoxWidth-textLen)/2, optionY+(optionBoxHeight), optionList[i]);
         }
 
         keyPress = getKey();
@@ -75,7 +96,6 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
                 selection = numOptions;
         }
         // ignore other keys, no other options
-
     }
     while(1);
 
@@ -88,28 +108,41 @@ void displayBoard(int board[], int yourBoard)
     int x = 1;
     int y = 1;
     int dimension = 120;
-    
+    int top = 0;
+    int left = 0;
+    int textWidthSpace = 10;
+    const char *cols[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+    const char *rows[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     if(yourBoard){
-        // Draw black box that covers the entire screen
-        drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(0,0,0));
+        x = left = 1;
+        y = top = 1;
     } else {
-        x = dimension;
-        y = dimension;
+        x = left = dimension + 3*textWidthSpace + 1;
+        y = top = dimension - 50 + 1;
         dimension = 160;
-        drawBox(x, y, dimension, dimension, colorRGB(0,0,0));
     }  
     
+    drawBox(x, y, dimension, dimension, colorRGB(0,0,0));
     // Set the dimension for each individual square (12 or 16 pixels)
     int square = dimension/10;
 
+    // If you are drawing their board, write the row and column titles
     // Loop through the board array and color individual squares accordingly
     int i = 0;
-    for(i;i<100;i++){
+    for(i = 0; i<100; ++i){
         // Reset x & y corrdinates for a new row
         if(i%10 == 0){
-          x = 1;
-          y = y+square+1;
+            if(i > 9) {
+                x = left;
+                y += square + 1;
+            }
+            if(!yourBoard)
+                drawText(x-2*textWidthSpace, y+textWidthSpace+textWidthSpace/4, rows[i/10]);
         }
+        if(i <= 9 && !yourBoard) {
+           drawText(x+textWidthSpace/2, y-textWidthSpace, cols[i]); 
+        }
+
         // Water - Red
         if(board[i] == 0) drawBox(x, y, square, square, COLOR_WATER);
         // Miss - White
@@ -118,6 +151,7 @@ void displayBoard(int board[], int yourBoard)
         if(board[i] == 4) drawBox(x, y, square, square, COLOR_HIT);
         // Ship - Grey
         if(board[i] > 7 && yourBoard) drawBox(x, y, square, square, COLOR_SHIP);
+        else if(board[i] > 7) drawBox(x, y, square, square, COLOR_WATER);
     
         x += square + 1;  // Leave a one pixel boarder between squares
     }

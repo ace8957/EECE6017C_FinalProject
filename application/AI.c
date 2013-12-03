@@ -38,10 +38,10 @@
 */
 
 //Global constant definitions
-#define IS_HIT 1
-#define IS_MISS 0
+#define IS_HIT 2
+#define IS_MISS 1
 #define SHIP_MASK 0xF8
-#define NONE 999
+#define NONE -1
 
 //externs
 extern int player1[total_board_size];
@@ -59,8 +59,15 @@ int initialize_ai(void) {
 	return 0;
 }
 
-//board - the master copy of the board, probably player2[] from globals.c
-int ai_place_ships(void) {
+void ai_place_ships(void) {
+	int edges[] = {
+				0,1,2,3,4,5,6,7,8,9,
+				10,20,30,40,50,60,70,80,90,
+				91,92,93,94,95,96,97,98,99,
+				19,29,39,49,59,69,79,89
+			};
+	int random_edge_index = rand() % (sizeof(edges)/sizeof(int));
+	
 	//TODO: get rid of this hard code
 	int tmp_board[] = {
         8,8,8,8,8,0,0,0,0,0,
@@ -75,7 +82,6 @@ int ai_place_ships(void) {
         0,0,0,0,0,0,0,0,0,128,
     };
 	memcpy(player2, tmp_board, sizeof(tmp_board));
-	return 0;
 }
 
 int get_random_index(void) {
@@ -99,29 +105,43 @@ int ai_check_hit(int index) {
 
 //board - the master copy of the board, probably player2[] from globals.c
 void ai_make_attack(int index) {
-	if(ai_check_hit(index)) {
-		//set the hit flag in the master board
-		//FIXME: are we doing bitflags or assigned values?
-		player2[index] = hit;//that's a global define from globals.h
-		
+	if(ai_check_hit(index)) {	
 		//set the flag in the ai-only board that is used to make decisions
 		ai_game_board[index] = IS_HIT;
+		locality_count = 0;
+		last_hit = index;
 	}
 	else {
-		//set the miss flag in the master board
-		//FIXME: are we doing bitflags or assigned values?
-		player2[index] = miss;//that's a global define from globals.h
-		
 		//set the flag in the ai-only board that is used to make decisions
 		ai_game_board[index] = IS_MISS;
 	}
 }
 
-int ai_get_attack_direction(void) {
-	
+int check_valid_index(int index) {
+	if(index > 100 || index < 0 || ai_game_board[index])
+		return 0;
+	return 1;
 }
 
-void ai_make_move(void) {
+int get_index(start_index, direction) {
+	if(direction > 3 || direction < 0)
+		return NONE;
+	int tmp = 0;
+	switch(direction) {
+		case 0:	tmp = start_index + 10;
+				break;
+		case 1: tmp = start_index - 10;
+				break;
+		case 2: tmp = start_index + 1;
+				break;
+		case 3: tmp = start_index - 1;
+				break;
+		default: printf("you done fucked up\n");
+	}
+	return check_valid_index(tmp) ? tmp : NONE;
+}
+
+int ai_make_move(void) {
 	int attack_index = NONE;
 	
 	//check if this is our first move
@@ -132,5 +152,26 @@ void ai_make_move(void) {
 	else {
 		//it's not our first move, check to see if we have gotten a last hit
 		//use a counter to check cardinal directions
+		if(last_hit && (locality_count < 4)) {
+			switch(locality_count) {
+				case 0:	attack_index = get_index(last_hit, 0);
+						break;
+				case 1:	attack_index = get_index(last_hit, 1);
+						break;
+				case 2:	attack_index = get_index(last_hit, 2);
+						break;
+				case 3: attack_index = get_index(last_hit, 3);
+						break;
+				default: printf("you done fucked up\n");
+			}
+		}
+		else {
+			attack_index = get_random_index();
+		}
 	}
+	if(attack_index == NONE)
+		attack_index = get_random_index();
+	last_attack = attack_index;
+	ai_make_attack(attack_index);
+	return attack_index;
 }

@@ -59,6 +59,11 @@ int initialize_ai(void) {
 	return 0;
 }
 
+struct {
+	struct node* next;
+	int data;
+}node;
+
 void ai_place_ships(void) {
 	int edges[] = {
 				0,1,2,3,4,5,6,7,8,9,
@@ -67,6 +72,7 @@ void ai_place_ships(void) {
 				19,29,39,49,59,69,79,89
 			};
 	int random_edge_index = rand() % (sizeof(edges)/sizeof(int));
+	
 	
 	//TODO: get rid of this hard code
 	int tmp_board[] = {

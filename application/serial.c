@@ -114,11 +114,17 @@ int rx_Handshake(void) {
     }
     // The handshake has been established so lets send a message back to the computer 
     data = tx_handshake;
+    count = 0;
     while(*data) {
         // we can write directly without thinking about other bit fields for this
         // case ONLY, because only DATA field of the data register is writable
         __builtin_stwio(RS232_UART_DATA, (*data));
         *data++;
+        // Keep a count of how many bits we have sent. Once we go over the space break
+        // from the loop to prevent buffer overflow.
+        count++;
+        if (count >= 10)
+            break;
     }
     // We should be done here so we can continue on
     
@@ -179,8 +185,14 @@ int tx_Handshake(void)
         // case ONLY, because only DATA field of the data register is writable
         __builtin_stwio(RS232_UART_DATA, (*data));
         *data++;
+        // Keep a count of how many bits we have sent. Once we go over the space break
+        // from the loop to prevent buffer overflow.
+        count++;
+        if (count >= 10)
+            break;
     }
     
+    count = 0;
     // If the the computer reads the message correctly then it will send us a message back.
     while (messageRecieved == 0)
     {

@@ -28,7 +28,7 @@ int start_new_game()
 		// either 2 players or 1 player against AI
         // global variable will hold status of players
     //for now set to 2 player, so game_mode=0
-    int menu_return = UI_MENU_ESCAPE;
+    int menu_return = MENU_ESCAPE;
     do{
         game_mode = displayMenu("select game mode",PLAYER,AI);
     } while(game_mode == menu_return);

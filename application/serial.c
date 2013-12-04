@@ -27,6 +27,22 @@
  */
 int sendGameBoard(int *p_GameBoard)
 {
+    int i = 0;
+    char testMessage[] = {'1','2','3','2','1','2','3','1','2','3','2','1','2','3','1','2','3','2','1','2','3'};
+    
+    // First establish a handshake with the other game board.
+    tx_Handshake();
+    printf("tx_Handshake established!\n");
+    
+    // Now we can send the gameboard over one character at a time
+    for (i = 0; i < 21; i++)
+    {
+        sendSerialMessage(testMessage[i]);
+    }
+    
+    // Now send the new line character that the other board is looking for
+    sendSerialMessage('\n');
+    
     return SERIAL_SUCCESS;
 }
 
@@ -40,44 +56,59 @@ int sendGameBoard(int *p_GameBoard)
  */
 int* receiveGameBoard(void)
 {
+    unsigned int data_reg;
+    unsigned char *data;
+    unsigned int pe = 0;
+    int retVal;
+    char gameBoard[100];
+    int messageReceived = 0;
+    int idx = 0;
+    
+    // First establish a handshake with the other game board
+    rx_Handshake();
+    printf("rx_Handshake established!\n");
+      
+    // Now wait until the full message is received (we know by the new line character)
+    while (messageReceived == 0)
+    {
+        data_reg = __builtin_ldwio(RS232_UART_DATA);
+        *data = (data_reg & 0x000001FF);
+        retVal = ((data_reg & 0x00008000) >> 15) - 1;
+        pe = alt_up_rs232_check_parity(data_reg);
+        if (retVal != -1) {
+            if (((char)('\n')) == ((char)*data)) // Make sure it is not the last character
+            {
+                messageReceived = 1;
+            }
+            else
+            {
+                gameBoard[idx] = (char)(*data);
+                idx++;
+            }
+            printf("character: %c\n", (char)(*data));
+        }
+    }   
+    
     return 0;
 } 
 
 // Helper functions
-/*
-int sendSerialMessage(unsigned char msg)
-{
-    
-    
-    // University of Toronto Website
-    unsigned char hwld[] = {'H','e','l','l','o',' ','W','o','r','l','d','\0'};
-    unsigned char *pOutput;
-
-    pOutput = hwld;
-    if (tx_Handshake() == 1)
-    {
-        return 1;
-    }
-    else
-    {
-        while(*pOutput) //strings in C are zero terminated
-        {
-             //if room in output buffer
-             if((*RS232_UART_CONTROL)&0xffff0000  ) 
-             {
-                //then write the next character
-                *RS232_UART_DATA = (*pOutput++); 
-             }
-         }
-        return 0;
-    }
-	return 1;
-}*/
 int alt_up_rs232_check_parity(unsigned int data_reg)
 {
 	unsigned parity_error = (data_reg & 0x00000200) >> 9;
 	return (parity_error ? -1 : 0);
 }
+
+int sendSerialMessage(unsigned char msg)
+{
+    // we should check the fifo here and make sure there is room
+    
+    
+    // we can write directly without thinking about other bit fields for this
+    // case ONLY, because only DATA field of the data register is writable
+    __builtin_stwio(RS232_UART_DATA, (msg));
+}
+
 
 int rx_Handshake(void) {
 	unsigned int data_reg;
@@ -123,7 +154,7 @@ int rx_Handshake(void) {
         // Keep a count of how many bits we have sent. Once we go over the space break
         // from the loop to prevent buffer overflow.
         count++;
-        if (count >= 10)
+        if (count >= 9)
             break;
     }
     // We should be done here so we can continue on
@@ -188,7 +219,7 @@ int tx_Handshake(void)
         // Keep a count of how many bits we have sent. Once we go over the space break
         // from the loop to prevent buffer overflow.
         count++;
-        if (count >= 10)
+        if (count >= 9)
             break;
     }
     

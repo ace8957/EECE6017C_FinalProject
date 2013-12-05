@@ -19,25 +19,33 @@
  * This call will send the game board across the serial port once a handshake
  * has been setup.
  * 
- * @param p_GameBoard   A pointer to the beginning of the game board array.
+ * @param gameBoard[] The array with the game board to be overwritten with the
+ *                    updated game board.
+ * @param length      The length of the array.
  * 
  * @ret int A status code
  *  SERIAL_SUCCESS - the game board was sent successfuly
  *  SERIAL_FAIL - the game board failed to send.
  */
-int sendGameBoard(int *p_GameBoard)
+int sendGameBoard(int gameBoard[], int length)
 {
     int i = 0;
-    char testMessage[] = {'a','b','c','b','a','b','c','a','b','c','b','a','b','c','a','b','c','b','a','b','c'};
+    char charGameBoard[total_board_size-1];
     
+    // Here we are converting our interger game board to characters to be tranfered over serial
+    for (i = 0; i < length; i++)
+    {
+        charGameBoard[i] = (char)(((int)'0')+gameBoard[i]);
+    }
+
     // First establish a handshake with the other game board.
     tx_Handshake();
     printf("tx_Handshake established!\n");
     
     // Now we can send the gameboard over one character at a time
-    for (i = 0; i < 21; i++)
+    for (i = 0; i < length; i++)
     {
-        sendSerialMessage(testMessage[i]);
+        sendSerialMessage(charGameBoard[i]);
     }
     
     // Now send the new line character that the other board is looking for
@@ -49,24 +57,30 @@ int sendGameBoard(int *p_GameBoard)
 /* API Function: receiveGameBoard()
  * 
  * This call will wait until the partner board sends the other game board.
- * Once it receives the board it will pass back a pointer to beginning of
- * the updated game board.
+ * Once it receives the board it will overwrite the array that was passed in
+ * with the updated game board.
  * 
- * @ret int* the updated game board.
+ * @param gameBoard[] The array with the game board to be overwritten with the
+ *                    updated game board.
+ * @param length      The length of the array.
+ * 
+ * @ret int A status code
+ *  SERIAL_SUCCESS - the game board was received successfuly
+ *  SERIAL_FAIL - the game board failed to receive.
  */
-int* receiveGameBoard(void)
+int receiveGameBoard(int gameBoard[], int length)
 {
     unsigned int data_reg;
     unsigned char *data;
     unsigned int pe = 0;
     int retVal;
-    char gameBoard[100];
+    char charGameBoard[100];
     int messageReceived = 0;
-    int idx = 0;
+    int idx = 0, i = 0;
     
     // First establish a handshake with the other game board
-    tx_Handshake();
-    printf("tx_Handshake established!\n");
+    rx_Handshake();
+    printf("rx_Handshake established!\n");
       
     // Now wait until the full message is received (we know by the new line character)
     while (messageReceived == 0)
@@ -82,14 +96,35 @@ int* receiveGameBoard(void)
             }
             else
             {
-                gameBoard[idx] = (char)(*data);
+                charGameBoard[idx] = (char)(*data);
                 idx++;
             }
-            printf("character: %c\n", (char)(*data));
         }
-    }   
+    }
+
+    // We did not receive the correct number of bits!
+    if (idx != length)
+        return SERIAL_FAIL;
+        
+    // Overwrite the existing game board with updated one
+    for (i = 0; i < length; i++)
+    {
+        gameBoard[i] = (int)charGameBoard[i];
+        if (i % 10 == 0)
+            printf("\n");
+        printf("%d,", gameBoard[i]);
+    }
+    printf("\n");
     
-    return 0;
+    // Printing out the game board just for testing purposes
+    for (i = 0; i < idx; i++)
+    {
+        if (i % 10 == 0)
+            printf("\n");
+        printf("%c,", (char)charGameBoard[i]);
+    }
+    
+    return SERIAL_SUCCESS;
 } 
 
 // Helper functions
@@ -157,46 +192,7 @@ int rx_Handshake(void) {
         if (count >= 9)
             break;
     }
-    // We should be done here so we can continue on
-    
-    /*
-	while(1) {
-		data_reg_old = data_reg;
-		data_reg = ((*RS232_UART_READ_DATA) & 0x1FF);
-        pe = ((*RS232_UART_DATA) & 0x100);
-		control_reg = (*RS232_UART_CONTROL);
-		// if(data_reg != 0 || control_reg != 0x800000)
-			// printf("Data reg: %x, Control reg: %x\n", data_reg, control_reg);
-		if(data_reg != data_reg_old)
-        {
-            printf("RS232_UART_DATA: %x\n", (*RS232_UART_DATA));
-            printf("RS232_UART_READ_DATA: %x\n", (*RS232_UART_READ_DATA));
-			printf("character: %c\n", (char)data_reg);  
-            *RS232_UART_READ_DATA = (*RS232_UART_READ_DATA)&0x80;            
-        }
-        if (pe != 0)
-            printf("PE = 1\n");
-	*/
 }
-
-unsigned rs232_get_available_space_in_write_FIFO(void)
-{
-	unsigned char ctrl_reg;
-	ctrl_reg = __builtin_ldwio((void *)(((unsigned char*)RS232_UART_DATA) + ((1) * (32/8)))); 
-	return (ctrl_reg & 0xFFFF0000) >> 16;
-}
-/*
-unsigned alt_up_rs232_get_used_space_in_read_FIFO(alt_up_rs232_dev *rs232)
-{
-	alt_u16 ravail = 0;
-	// we can only read the 16 bits for RAVAIL --- a read of DATA will discard the data
-//	ravail = IORD_16DIRECT(IOADDR_ALT_UP_RS232_DATA(rs232->base), 2); 
-	ravail = IORD_ALT_UP_RS232_RAVAIL(rs232->base); 
-//	return ravail;
-	return (ravail & ALT_UP_RS232_RAVAIL_MSK) >> ALT_UP_RS232_RAVAIL_OFST;
-}
-*/
-
 
 int tx_Handshake(void)
 {
@@ -248,35 +244,6 @@ int tx_Handshake(void)
             printf("parity: %d\n", pe);
         }
     }
-    
-    /*
-    while(1)
-    {
-    pOutput = tx_handshake;
-    while(*pOutput) //strings in C are zero terminated
-    {
-         //if room in output buffer
-         if((*RS232_UART_CONTROL)&0xffff0000  ) 
-         {
-            printf("%x\n",*pOutput);
-            printf("%c\n",(char)(0xff & *pOutput));
-            //then write the next character
-            *RS232_UART_DATA = (*pOutput++); 
-         }
-    }
-    }
-    while(1)
-    {
-        // wait until our data field contains the rx_message;
-        if (((*RS232_UART_DATA) & 0x0000ffff ) == 0x00000002)
-        {
-            count++;
-        }
-        if (count == 7)
-        {
-            return 0;
-        }
-    }
-    */
+
     return 1;
 }

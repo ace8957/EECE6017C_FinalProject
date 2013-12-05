@@ -49,13 +49,13 @@ int start_new_game()
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
 		//
-        receiveGameBoard();
+        //receiveGameBoard();
 	}
 	place_ships();
    // if(game_mode == PLAYER) sendGameBoard();
 
     if(player_number == player_one){
-        if(game_mode == PLAYER) receiveGameBoard();
+        if(game_mode == PLAYER) printf("fix me");//receiveGameBoard();
         else {
             //initialize_ai();
             //ai_place_ships();

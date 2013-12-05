@@ -105,17 +105,7 @@ int receiveGameBoard(int gameBoard[], int length)
     // We did not receive the correct number of bits!
     if (idx != length)
         return SERIAL_FAIL;
-        
-    // Overwrite the existing game board with updated one
-    for (i = 0; i < length; i++)
-    {
-        gameBoard[i] = (int)charGameBoard[i];
-        if (i % 10 == 0)
-            printf("\n");
-        printf("%d,", gameBoard[i]);
-    }
-    printf("\n");
-    
+       
     // Printing out the game board just for testing purposes
     for (i = 0; i < idx; i++)
     {
@@ -123,6 +113,13 @@ int receiveGameBoard(int gameBoard[], int length)
             printf("\n");
         printf("%c,", (char)charGameBoard[i]);
     }
+    printf("\n");
+    // Overwrite the existing game board with updated one
+    for (i = 0; i < length; i++)
+    {
+        gameBoard[i] = charGameBoard[i] - '0';
+    }
+    printf("\n");
     
     return SERIAL_SUCCESS;
 } 

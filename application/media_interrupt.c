@@ -154,8 +154,9 @@ int main(void)
     //displayBoard(boardYours,0);
     //displayBoard(boardTheirs,1);
     //while(1);
-    flags = tx_Handshake();
-    printf("tx_Handshake established!\n");
+    flags = receiveGameBoard();
+    //flags = tx_Handshake();
+    printf("Game Board Sent!\n");
 	while (1)
 	{
 		while (!timeout)

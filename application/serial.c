@@ -28,7 +28,7 @@
 int sendGameBoard(int *p_GameBoard)
 {
     int i = 0;
-    char testMessage[] = {'1','2','3','2','1','2','3','1','2','3','2','1','2','3','1','2','3','2','1','2','3'};
+    char testMessage[] = {'a','b','c','b','a','b','c','a','b','c','b','a','b','c','a','b','c','b','a','b','c'};
     
     // First establish a handshake with the other game board.
     tx_Handshake();
@@ -65,8 +65,8 @@ int* receiveGameBoard(void)
     int idx = 0;
     
     // First establish a handshake with the other game board
-    rx_Handshake();
-    printf("rx_Handshake established!\n");
+    tx_Handshake();
+    printf("tx_Handshake established!\n");
       
     // Now wait until the full message is received (we know by the new line character)
     while (messageReceived == 0)

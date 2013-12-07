@@ -10,12 +10,14 @@
 
 void reset_player_arrays();
 void place_ships();
+void update_ship_position(ship,ship_position_x,ship_position_y,vertical);
 
 extern volatile int player_number;
 extern volatile int player1[total_board_size];
 extern volatile int player2[total_board_size];
 
 volatile int game_mode = 0;
+
 /**
  * @brief start_new_game - used to start up a new game
  * @return returns the number of players 1 for one player with ai and 2 for serial comm
@@ -98,6 +100,7 @@ void place_ships()
 				case UP:
 					if (ship_position[y_axis] > 0)					
 						ship_position[y_axis] = ship_position[y_axis] - 1;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical);
 					break;
 				case DOWN:
 					if (vertical)
@@ -184,4 +187,9 @@ int set_player_number()
     return -1;//error occured
 }
 
-
+void update_ship_position(ship,ship_position_x,ship_position_y,orientation){
+	int current_ship_size = ship_size(ship);
+	if (vertical){
+		// figure out 
+	}
+}

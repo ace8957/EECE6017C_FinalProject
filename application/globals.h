@@ -13,8 +13,9 @@
 #define number_of_ships	5
 
 //board size 101: 100 for the board and 1 for status of remaining ships
-#define total_board_size 101
-#define board_size		 10
+#define total_board_size	101
+#define board_size		 	10
+#define status_bit			100 	// the last bit in the board array
 //board values: values for the status of the board
 #define water       0
 #define miss        2

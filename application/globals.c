@@ -10,34 +10,38 @@ volatile int change;							//ps/2 bool flag for buffer change
 
 volatile int timeout;								// used to synchronize with the timer
 
-/*boards*/
-
-volatile int myBoard[board_size];
-volatile int opBoard[board_size];
-
-
 volatile int player_number = 1; // default player 1
 
 /*
 	array element defines:
-	0-9:	row A columns 1-10
-	10-19:	row B columns 1-10
-	20-29:	row C columns 1-10
-	30-39:	row D columns 1-10
-	40-49:	row E columns 1-10
-	50-59:	row F columns 1-10
-	60-69:	row G columns 1-10
-	70-79:	row H columns 1-10
-	80-89:	row I columns 1-10
-	90-99:	row J columns 1-10
+	0-9:	row A columns 0-9
+	10-19:	row B columns 0-9
+	20-29:	row C columns 0-9
+	30-39:	row D columns 0-9
+	40-49:	row E columns 0-9
+	50-59:	row F columns 0-9
+	60-69:	row G columns 0-9
+	70-79:	row H columns 0-9
+	80-89:	row I columns 0-9
+	90-99:	row J columns 0-9
 	
 	element 100 bits:
-	0-4:	00000 carrier hits
-	5-9:	X0000 battleship hits
-	10-14:	XX000 submarine hits
-	15-19:	XX000 cruiser hits
-	20-24:	XXX00 destroyer hits
-	25-31;	XXXXXXX undefined
+	bit	value	meaning
+	-----------------------------
+	0:	1		carrier sunk
+	1:	2		battleship sunk
+	2:	4		submarine sunk
+	3:	8		cruiser sunk
+	4:	16		destroyer sunk
+	-----------------------------
+	5:	32		carrier placed
+	6:	64		battleship placed
+	7:	128		submarine placed
+	8:	256		cruiser placed
+	9:	512		destroyer placed
+	-----------------------------
+	10-31;	undefined
+	
 */
 int player1[total_board_size];
 int player2[total_board_size];

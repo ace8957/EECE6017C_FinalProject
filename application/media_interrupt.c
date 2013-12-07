@@ -154,6 +154,9 @@ int main(void)
     //displayBoard(boardYours,0);
     //displayBoard(boardTheirs,1);
     //while(1);
+    flags = sendGameBoard(boardTheirs, 100);
+    //flags = tx_Handshake();
+    printf("Game Board Sent!\n");
 	while (1)
 	{
 		while (!timeout)
@@ -162,7 +165,7 @@ int main(void)
         VGA_box(blue_x, blue_y, box_len, background_color);
         
         //keyVal = getKey();
-        flags = tx_Handshake();
+        
         if (keyVal == UP)
             printf("UP\n");
         else if (keyVal == DOWN)

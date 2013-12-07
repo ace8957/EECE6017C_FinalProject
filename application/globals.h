@@ -36,6 +36,6 @@
 #define AI 0
 #define PLAYER 1
 
-//#define SERIAL_SHITS 1
+#define SERIAL_SHITS 1
 
 #endif //GLOBALS_H

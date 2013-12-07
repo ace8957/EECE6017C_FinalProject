@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nios2_config>
+<nios2_config version="1.0">
     <system>
         <system_info filepath="true">..\hardware\nios_system.sopcinfo</system_info>
         <system_sof filepath="true">..\hardware\DE1_Media_Computer.sof</system_sof>
-        <system_jdi filepath="true">..\hardware\DE1_Media_Computer.jdi</system_jdi>        <cable>USB-Blaster [USB-0]</cable>
+        <system_jdi filepath="true">..\hardware\DE1_Media_Computer.jdi</system_jdi>
+        <cable>USB-Blaster [USB-1]</cable>
         <processor JTAGHubInstanceID="0">CPU</processor>
         <elf_section name="text">
             <memory_device>SDRAM/s1</memory_device>
@@ -23,25 +24,25 @@
                 <source_file filepath="true">globals.c</source_file>
                 <source_file filepath="true">globals.h</source_file>
                 <source_file filepath="true">media_interrupt.c</source_file>
-                <source_file filepath="true">PS2_ISR.c</source_file>               
-                <source_file filepath="true">interval_timer_ISR.c</source_file>               
-                <source_file filepath="true">nios2_ctrl_reg_macros.h</source_file>               
-                <source_file filepath="true">exception_handler.c</source_file>               
-                <source_file filepath="true">keyboard.h</source_file>               
+                <source_file filepath="true">PS2_ISR.c</source_file>
+                <source_file filepath="true">interval_timer_ISR.c</source_file>
+                <source_file filepath="true">nios2_ctrl_reg_macros.h</source_file>
+                <source_file filepath="true">exception_handler.c</source_file>
+                <source_file filepath="true">keyboard.h</source_file>
                 <source_file filepath="true">keyboard.c</source_file>
                 <source_file filepath="true">serial.h</source_file>
                 <source_file filepath="true">serial.c</source_file>
-				<source_file filepath="true">setup.c</source_file>
-				<source_file filepath="true">setup.h</source_file>
-				<source_file filepath="true">game.c</source_file>
-				<source_file filepath="true">game.h</source_file>
-				<source_file filepath="true">graphics.c</source_file>
-				<source_file filepath="true">graphics.h</source_file>
-				<source_file filepath="true">ui.c</source_file>
-				<source_file filepath="true">ui.h</source_file>
-				<source_file filepath="true">AI.c</source_file>
+                <source_file filepath="true">setup.c</source_file>
+                <source_file filepath="true">setup.h</source_file>
+                <source_file filepath="true">game.c</source_file>
+                <source_file filepath="true">game.h</source_file>
+                <source_file filepath="true">graphics.c</source_file>
+                <source_file filepath="true">graphics.h</source_file>
+                <source_file filepath="true">ui.c</source_file>
+                <source_file filepath="true">ui.h</source_file>
+                <source_file filepath="true">AI.c</source_file>
             </source_files>
-            <compiler_flags>-O1 -ffunction-sections -fverbose-asm -fno-inline</compiler_flags>
+            <compiler_flags>-g -O1 -ffunction-sections -fverbose-asm -fno-inline</compiler_flags>
             <emulate_unimpl_instructions>true</emulate_unimpl_instructions>
             <use_small_c_library>true</use_small_c_library>
         </options>

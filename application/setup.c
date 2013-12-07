@@ -30,7 +30,7 @@ int start_new_game()
 		// either 2 players or 1 player against AI
         // global variable will hold status of players
     //for now set to 2 player, so game_mode=0
-    int menu_return = UI_MENU_ESCAPE;
+    int menu_return = MENU_ESCAPE;
     do{
         game_mode = displayMenu("select game mode",PLAYER,AI);
     } while(game_mode == menu_return);
@@ -51,13 +51,13 @@ int start_new_game()
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
 		//
-        receiveGameBoard();
+        //receiveGameBoard();
 	}
 	place_ships();
    // if(game_mode == PLAYER) sendGameBoard();
 
     if(player_number == player_one){
-        if(game_mode == PLAYER) receiveGameBoard();
+        if(game_mode == PLAYER) printf("fix me");//receiveGameBoard();
         else {
             //initialize_ai();
             //ai_place_ships();

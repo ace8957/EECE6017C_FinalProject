@@ -56,6 +56,112 @@ int getKey(void)
 		keyboardLock = 0;
 		return ENTER;
 	}
+	else if(keyPressed == ESC)
+	{
+		keyboardLock = 0;
+		return ESC;
+	}
+	
+	else if(keyPressed == ZERO)
+	{
+		keyboardLock = 0;
+		return ZERO;
+	}
+	else if(keyPressed == ONE)
+	{
+		keyboardLock = 0;
+		return ONE;
+	}
+	else if(keyPressed == TWO)
+	{
+		keyboardLock = 0;
+		return TWO;
+	}
+	else if(keyPressed == THREE)
+	{
+		keyboardLock = 0;
+		return THREE;
+	}
+	else if(keyPressed == FOUR)
+	{
+		keyboardLock = 0;
+		return FOUR;
+	}
+	else if(keyPressed == FIVE)
+	{
+		keyboardLock = 0;
+		return FIVE;
+	}
+	else if(keyPressed == SIX)
+	{
+		keyboardLock = 0;
+		return SIX;
+	}
+	else if(keyPressed == SEVEN)
+	{
+		keyboardLock = 0;
+		return SEVEN;
+	}
+	else if(keyPressed == EIGHT)
+	{
+		keyboardLock = 0;
+		return EIGHT;
+	}
+	else if(keyPressed == NINE)
+	{
+		keyboardLock = 0;
+		return NINE;
+	}
+	else if(keyPressed == Akey)
+	{
+		keyboardLock = 0;
+		return Akey;
+	}
+	else if(keyPressed == Bkey)
+	{
+		keyboardLock = 0;
+		return Bkey;
+	}
+	else if(keyPressed == Ckey)
+	{
+		keyboardLock = 0;
+		return Ckey;
+	}
+	else if(keyPressed == Dkey)
+	{
+		keyboardLock = 0;
+		return Dkey;
+	}
+	else if(keyPressed == Ekey)
+	{
+		keyboardLock = 0;
+		return Ekey;
+	}
+	else if(keyPressed == Fkey)
+	{
+		keyboardLock = 0;
+		return Fkey;
+	}
+	else if(keyPressed == Gkey)
+	{
+		keyboardLock = 0;
+		return Gkey;
+	}
+	else if(keyPressed == Hkey)
+	{
+		keyboardLock = 0;
+		return Hkey;
+	}
+	else if(keyPressed == Ikey)
+	{
+		keyboardLock = 0;
+		return Ikey;
+	}
+	else if(keyPressed == Jkey)
+	{
+		keyboardLock = 0;
+		return Jkey;
+	}
 	else
 	{
 		keyboardLock = 0;

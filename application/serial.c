@@ -30,9 +30,9 @@
 int sendGameBoard(int gameBoard[], int length)
 {
     int i = 0;
-    char charGameBoard[total_board_size-1];
+    char charGameBoard[total_board_size];
     
-    // Here we are converting our interger game board to characters to be tranfered over serial
+    // Here we are converting our interger game board to characters to be transferred over serial
     for (i = 0; i < length; i++)
     {
         charGameBoard[i] = (char)(((int)'0')+gameBoard[i]);
@@ -74,7 +74,7 @@ int receiveGameBoard(int gameBoard[], int length)
     unsigned char *data;
     unsigned int pe = 0;
     int retVal;
-    char charGameBoard[100];
+    char charGameBoard[total_board_size];
     int messageReceived = 0;
     int idx = 0, i = 0;
     

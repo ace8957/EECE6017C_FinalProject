@@ -168,7 +168,7 @@ void place_ships(int player)
 					break;
 				case LEFT:
 					if (ship_position[x_axis] > 0)
-						old_array_position = array_position + current_length_max;
+						old_array_position = array_position + current_length_max-1;
 						ship_position[x_axis] = ship_position[x_axis] - 1;
 					break;
 				case RIGHT:
@@ -290,10 +290,10 @@ void copy_arrays(){
 void update_screen(){
 	if (player_number == player_one){
 		displayBoard((int *) player1, SHOW_SHIPS);
-		//displayBoard((int *) player2, NO_SHIPS);
+		displayBoard((int *) player2, NO_SHIPS);
 	}
 	if (player_number == player_two){
 		displayBoard((int *) player2, SHOW_SHIPS);
-		//displayBoard((int *) player1, NO_SHIPS);
+		displayBoard((int *) player1, NO_SHIPS);
 	}
 }

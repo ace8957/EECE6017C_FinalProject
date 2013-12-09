@@ -72,7 +72,6 @@ void ai_place_ships(void) {
     int ship_size = 0;
     int start_index = 0;
     int tmp_board [total_board_size];
-    //TODO: Add carrier placement shit
     while(index < 5) {
         ship_id = ships[index];
         ship_size = sizes[index];
@@ -88,7 +87,13 @@ void ai_place_ships(void) {
         while(!check_valid_index(start_index) || count < ship_size) {
             if(!check_valid_index(tmp_index = get_index(tmp_index, direction))) {
                 direction = rand() % 3;
-                start_index = rand() % 100;
+                if(index == 0) {
+                    random_edge_index = rand() % (sizeof(edges)/sizeof(int));
+                    start_index = edges[random_edge_index];
+                }
+                else {
+                    start_index = rand() % 100;
+                }
                 tmp_index = start_index;
                 count = 0;
             }

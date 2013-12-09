@@ -11,6 +11,8 @@
 void reset_player_arrays();
 void place_ships(int player);
 void update_ship_position(int, int, int, int, int);
+void copy_arrays();
+void update_screen();
 
 extern volatile int player_number;
 extern volatile int player1[total_board_size];
@@ -225,6 +227,7 @@ void update_ship_position(int ship,int ship_position_x,int ship_position_y,int v
 		array_position = array_position + addition_value; // incremement to the next array position
 	}
 	copy_arrays();
+	update_screen();
 }
 
 void copy_arrays(){
@@ -233,5 +236,16 @@ void copy_arrays(){
 	for (i=0; i<total_board_size; i++){
 		player1[i] = player1_copy[i];
 		player2[i] = player2_copy[i];
+	}
+}
+
+void update_screen(){
+	if (player_number == player_one){
+		displayBoard((int *) player1, SHOW_SHIPS);
+		displayBoard((int *) player2, NO_SHIPS);
+	}
+	if (player_number == player_two){
+		displayBoard((int *) player2, SHOW_SHIPS);
+		displayBoard((int *) player1, NO_SHIPS);
 	}
 }

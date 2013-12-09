@@ -42,6 +42,9 @@
 #define AI 1
 #define PLAYER 2
 
+#define SHOW_SHIPS	1
+#define NO_SHIPS	0
+
 #define SERIAL_SHITS 1
 
 #endif //GLOBALS_H

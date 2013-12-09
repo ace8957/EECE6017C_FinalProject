@@ -317,7 +317,7 @@ int ai_make_move(void) {
 						break;
 				case 3: attack_index = get_index(last_hit, 3, player2);
 						break;
-				default: printf("you done fucked up\n");
+				default: printf("Invalid direction\n");
 			}
 		}
 		else {

@@ -74,21 +74,23 @@ int main()
 			new_game = 0; // reset new game flag
 			// function call to reset arrays
 		}
+		
 		// player one take turn
 		if (player_number == player_two){
-			receiveGameBoard(player1, total_board_size);
+			receiveGameBoard(player2, total_board_size);
         }
         if (player_number == player_one){
             //player one takes turn
             take_turn();
             check_status();
+			sendGameBoard(player2,total_board_size);
 		}
 		
 		// player 2 take turn
 		if (player_number == player_one){
             if(game_mode == PLAYER){
                 //player 2 waits for ai or human 2
-                receiveGameBoard(player2, total_board_size);
+                receiveGameBoard(player1, total_board_size);
             }
             else {
                 //ai takes turn
@@ -99,6 +101,7 @@ int main()
             //do player moves
             take_turn();
             check_status();
+			sendGameBoard(player1,total_board_size);
         }
 		
 		// game end, quit, or 

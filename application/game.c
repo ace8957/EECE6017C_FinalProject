@@ -20,10 +20,12 @@ void take_turn() {
     while(!valid) {
         do{
             y = getKey();
+        }while(y != ZERO && y != ONE && y!= TWO && y != THREE && y!= FOUR
+                && y != FIVE && y != SIX && y != SEVEN && y != EIGHT && y != NINE);
+		do{
             x = getKey();
         }while(x != ONE && x != TWO && x != THREE && x != FOUR && x != FIVE && x != SIX && x != SEVEN &&
-                x != EIGHT && x != NINE && x!= ZERO && y != ZERO && y != ONE && y!= TWO && y != THREE && y!= FOUR
-                && y != FIVE && y != SIX && y != SEVEN && y != EIGHT && y != NINE);
+                x != EIGHT && x != NINE && x!= ZERO);		
         switch(x) {
         case ONE:
             v1 = 1;

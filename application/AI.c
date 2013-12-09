@@ -69,48 +69,32 @@ void ai_place_ships(void) {
 	int random_edge_index = rand() % (sizeof(edges)/sizeof(int));
     struct ship_node * ship_head;
 
-	int direction;
-    int index = 0;
-    int ship_id = 0;
-    int ship_size = 0;
-    int start_index = 0;
-    int tmp_board [total_board_size];
-    while(index < 5) {
-        ship_id = ships[index];
-        ship_size = sizes[index];
-        direction = rand() % 3;
-        if(index == 0) {
-            start_index = edges[random_edge_index];
-        }
-        else {
-            start_index = rand() % 100;
-        }
-        int count = 0;
-        int tmp_index = start_index;
-        while(!check_valid_index(start_index) || count < ship_size) {
-            if(!check_valid_index(tmp_index = get_index(tmp_index, direction))) {
-                direction = rand() % 3;
-                if(index == 0) {
-                    random_edge_index = rand() % (sizeof(edges)/sizeof(int));
-                    start_index = edges[random_edge_index];
-                }
-                else {
-                    start_index = rand() % 100;
-                }
-                tmp_index = start_index;
-                count = 0;
-            }
-            else {
-                ++count;
-            }
-        }
-        count = 0;
-        while(count < ship_size) {
-            tmp_board[start_index] = ship_id;
-            start_index = get_index(start_index, direction);
-            count++;
-        }
-    }
+	//int direction; //int index = 0; //int ship_id = 0; //int ship_size = 0; //int start_index = 0; //int tmp_board [total_board_size]; //while(index < 5) { //    ship_id = ships[index]; //    ship_size = sizes[index]; //    direction = rand() % 3; //    if(index == 0) { //        start_index = edges[random_edge_index]; //    } //    else { //        start_index = rand() % 100; //    } //    int count = 0;
+    //    int tmp_index = start_index;
+    //    while(!check_valid_index(start_index) || count < ship_size) {
+    //        if(!check_valid_index(tmp_index = get_index(tmp_index, direction))) {
+    //            direction = rand() % 3;
+    //            if(index == 0) {
+    //                random_edge_index = rand() % (sizeof(edges)/sizeof(int));
+    //                start_index = edges[random_edge_index];
+    //            }
+    //            else {
+    //                start_index = rand() % 100;
+    //            }
+    //            tmp_index = start_index;
+    //            count = 0;
+    //        }
+    //        else {
+    //            ++count;
+    //        }
+    //    }
+    //    count = 0;
+    //    while(count < ship_size) {
+    //        tmp_board[start_index] = ship_id;
+    //        start_index = get_index(start_index, direction);
+    //        count++;
+    //    }
+    //}
 
         
     //struct ship_node * ship_traverse = NULL;
@@ -126,19 +110,23 @@ void ai_place_ships(void) {
     //    node.ship_size = sizes[index];
             
 	//TODO: get rid of this hard code
-	//int tmp_board[] = {
-    //    8,8,8,8,8,0,0,0,0,0,
-    //    0,0,0,0,0,0,0,0,0,0,
-    //    16,0,0,0,0,0,0,64,0,0,
-    //    16,0,0,0,0,0,0,64,0,0,
-    //    16,0,0,0,0,0,0,64,0,0,
-    //    16,0,0,0,0,0,0,0,0,0,
-    //    0,0,0,32,32,32,0,0,0,0,
-    //    0,0,0,0,0,0,0,0,0,0,
-    //    0,0,0,0,0,0,0,0,0,128,
-    //    0,0,0,0,0,0,0,0,0,128,
-    //};
-	memcpy(player2, tmp_board, sizeof(tmp_board));
+	int tmp_board[] = {
+        8,8,8,8,8,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        16,0,0,0,0,0,0,64,0,0,
+        16,0,0,0,0,0,0,64,0,0,
+        16,0,0,0,0,0,0,64,0,0,
+        16,0,0,0,0,0,0,0,0,0,
+        0,0,0,32,32,32,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,128,
+        0,0,0,0,0,0,0,0,0,128,
+    };
+    int count;
+    printf("setting board\n");
+    for(count = 0; count < 100; ++count) {
+        player2[count] = tmp_board[count];
+    }
 }
 
 int get_random_index(void) {

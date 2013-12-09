@@ -15,10 +15,10 @@ void copy_arrays();
 void update_screen();
 
 extern volatile int player_number;
-extern volatile int player1[total_board_size];
-extern volatile int player2[total_board_size];
-extern volatile int player1_copy[total_board_size];
-extern volatile int player2_copy[total_board_size];
+extern int player1[total_board_size];
+extern int player2[total_board_size];
+extern int player1_copy[total_board_size];
+extern int player2_copy[total_board_size];
 
 volatile int game_mode = 0;
 
@@ -76,6 +76,7 @@ int start_new_game()
             initialize_ai();
             printf("Out init works...\n");
             ai_place_ships();
+            displayBoard(player2,1);
         }
     }
 

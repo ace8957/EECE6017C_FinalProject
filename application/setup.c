@@ -34,21 +34,20 @@ int start_new_game()
     //for now set to 2 player, so game_mode=0
     int menu_return = MENU_ESCAPE;
     do{
-        game_mode = displayMenu("select game mode",PLAYER,AI);
+        game_mode = displayMenu("Select game mode", 2, "AI", "Human");
     } while(game_mode == menu_return);
-	
+    printf("game mode = %d\n", game_mode);
     if (game_mode == PLAYER){//check if 2 player or one player if 2 player get the player number else player number is 1 and ai will be 2
-        int space = SPACE, enter = ENTER;
         do{
-        player_number =displayMenu("select player number",SPACE, ENTER); // set_player_number(); // function call
-        }while(player_number != space || player_number != enter);
+            player_number = displayMenu("What player are you?", 2, "Player 1", "Player 2"); // set_player_number(); // function call
+        } while(game_mode == menu_return);
 		// enter receive state to wait for users to define player 1
 	}
     else player_number = 1;//ai mode
-	
 	// function call to reset arrays
+    printf("player number = %d\n", player_number);
 	reset_player_arrays();	
-	
+	return 1;
     // place ships on screen in turn
 	if (player_number == player_two){
 		// wait for player one to finish placing ships

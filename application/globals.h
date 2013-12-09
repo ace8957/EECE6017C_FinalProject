@@ -39,8 +39,8 @@
 #define player_two 2
 
 //define game mode
-#define AI 0
-#define PLAYER 1
+#define AI 1
+#define PLAYER 2
 
 #define SERIAL_SHITS 1
 

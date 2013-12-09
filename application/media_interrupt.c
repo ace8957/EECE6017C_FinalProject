@@ -53,8 +53,7 @@ void HEX_PS2(char, char);
  * 	5. The speed of refreshing the VGA screen
  * 	   are controlled by interrupts from the interval timer
 ********************************************************************************/
-#define SERIAL_SHITS 1
-#ifdef SERIAL_SHITS//in globals.h if you want to use
+#if (!SERIAL_SHITS) //in globals.h if you want to use
 int main(void)
 {
 	/* Declare volatile pointers to I/O registers (volatile means that IO load
@@ -162,12 +161,11 @@ int main(void)
 		while (!timeout)
 			;	// wait to synchronize with timer 
 
+        //displayBoard(player1);
+        start_new_game();
         //VGA_box(blue_x, blue_y, box_len, background_color);
         
         //keyVal = getKey();
-        
-        option = displayMenu("Main Menu", 2, "Option 1", "Option 2");
-        printf("Option %d\n", option);
         
         if (keyVal == UP)
             printf("UP\n");

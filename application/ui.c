@@ -67,7 +67,7 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
     do {
         optionX = menuX+(menuWidth-optionBoxWidth+optionBoxSeparation)/2;
         // Draw the options in their own boxes, with the first option highlighted
-        for(i = 1; i < numOptions; ++i) {
+        for(i = 1; i <= numOptions; ++i) {
             // Draw the selection background
             optionX = menuX+(menuWidth-optionBoxWidth)/2;
             optionY = menuY+(i)*optionBoxHeight + (optionBoxSeparation/2);
@@ -82,8 +82,9 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
 
             textLen = strlen(optionList[i])*charWidth;
             optionY = menuY+(i)*(optionBoxHeight+optionBoxSeparation);
-            drawBox(optionX, optionY+(optionBoxSeparation/2), optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
-            drawText(optionX+(optionBoxWidth-textLen)/2, optionY+(optionBoxHeight/4), optionList[i]);
+            optionX = menuX+(menuWidth-optionBoxWidth+optionBoxSeparation)/2;
+            //drawBox(optionX, optionY+(optionBoxSeparation/2), optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
+            drawText(optionX+(2*charWidth), optionY+(optionBoxHeight/2), optionList[i-1]);
         }
 
         keyPress = getKey();

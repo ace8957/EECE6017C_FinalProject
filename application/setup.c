@@ -105,6 +105,8 @@ void place_ships(int player)
     int x, y;// x and y position for checking
     int next_position;//the value to add to get to the next position
     int placed =0;
+	int array_position = ship_position[x_axis] + (ship_position[y_axis] * 10);
+	int old_array_position = 0;
 	
 	// print the ship on the screen to start out
 	update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
@@ -115,42 +117,41 @@ void place_ships(int player)
 		// dont move the ship if it is against the sides of the board
         while(!placed){
 			key_value = getKey();
+			array_position = ship_position[x_axis] + (ship_position[y_axis] * 10);
+			update_ship_position(i, array_position, old_array_position, vertical, player);
 			switch (key_value){
 				case UP:
-					if (ship_position[y_axis] > 0) {					
+					if (ship_position[y_axis] > 0) {			
+						old_array_position = array_position + current_length_max - 1;
 						ship_position[y_axis] = ship_position[y_axis] - 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
                     }
 					break;
 				case DOWN:
+					old_array_position = array_position;
 					if (vertical) {
 						if (ship_position[y_axis] < current_length_max)
 							ship_position[y_axis] = ship_position[y_axis] + 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
+							
                     }
 					else {
 						if (ship_position[y_axis] < current_width_max)
 							ship_position[y_axis] = ship_position[y_axis] + 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
                     }
 					break;
 				case LEFT:
 					if (ship_position[x_axis] > 0)
+						old_array_position = array_position + current_length_max - 1;
 						ship_position[x_axis] = ship_position[x_axis] - 1;
-                    update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					break;
 				case RIGHT:
-					// check location of ship for valid movement
-					// if valid
+					old_array_position = array_position;
 					if (!vertical) {
 						if (ship_position[x_axis] < current_length_max)
 							ship_position[x_axis] = ship_position[x_axis] + 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
                     }
 					else {
 						if (ship_position[x_axis] < current_width_max)
 							ship_position[x_axis] = ship_position[x_axis] + 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
                     }
 					break;
 				case SPACE:
@@ -159,12 +160,10 @@ void place_ships(int player)
 					if(vertical) {
 						if (ship_position[x_axis] < current_length_max)						
 							vertical = 0;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
                     }
 					else {
 						if (ship_position[y_axis] < current_length_max)
 							vertical = 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
                     }
 					break;
                 case ENTER:
@@ -220,17 +219,22 @@ int set_player_number()
     return -1;//error occured
 }
 
+<<<<<<< Updated upstream
 void update_ship_position(int ship,int ship_position_x,int ship_position_y,int vertical,int player){
 	int ship_size[number_of_ships] = {5,4,3,3,2}; //{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
+=======
+void update_ship_position(int ship,int array_position,int old_array_position,int vertical,int player){
+	int ship_size[number_of_ships] = {5,4,3,3,2}//{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
+>>>>>>> Stashed changes
 	int current_ship_size = ship_size[ship];
-	int array_position = 0; int moving_array = 0;
+	int moving_array = 0;
 	int i = 0; int addition_value = 0;
 	int current_ship[number_of_ships] = {carrier, battleship, submarine, cruiser, destroyer};
 	
 	if (vertical) addition_value = 10;  // for incrementing the row
 	else addition_value = 1;  // for incrementing the column
 
-	array_position = ship_position_x + (ship_position_y * 10);
+	
 	moving_array = 	array_position;
 	
 	for (i = 0; i<current_ship_size; i++){

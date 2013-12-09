@@ -76,8 +76,9 @@ void PS2_ISR( void )
     char lookUpResult;
 	static int ackReceived = 0;
 
-	if(keyboardLock)
-		return;
+	printf("Inside PS2_ISR()\n");
+	// if(keyboardLock)
+		// return;
 
 	PS2_data = *(PS2_ptr);					// read the Data register in the PS/2 port
 	RVALID = (PS2_data & 0x8000);			// extract the RVALID field

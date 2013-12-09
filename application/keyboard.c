@@ -9,19 +9,20 @@ extern volatile char byte1, byte2, byte3, byte4;
 // This function will return the most recent key pressed
 int getKey(void)
 {
+	printf("Inside getKey()\n");
     while (1)
     {
-        keyboardLock = 1;
+        // keyboardLock = 1;
         //printf("byte 1 = %x, byte 2 = %x, byte 3 = %x, byte 4 = %x\n",byte1,byte2,byte3,byte4);
         if (byte2 == byte3)// && (byte4 == (char)0xFFFFFFF0 || byte4 == (char)0xF0))
         {
             keyPressed = byte2;
             break;
         }
-        else
-        {
-            keyboardLock = 0;
-        }
+        // else
+        // {
+            // keyboardLock = 0;
+        // }
     }
     byte2 = 0x00;
     byte3 = 0x01;

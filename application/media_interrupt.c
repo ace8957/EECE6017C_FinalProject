@@ -53,7 +53,7 @@ void HEX_PS2(char, char);
  * 	5. The speed of refreshing the VGA screen
  * 	   are controlled by interrupts from the interval timer
 ********************************************************************************/
-
+#define SERIAL_SHITS 1
 #ifdef SERIAL_SHITS//in globals.h if you want to use
 int main(void)
 {
@@ -154,7 +154,7 @@ int main(void)
     //displayBoard(boardYours,0);
     //displayBoard(boardTheirs,1);
     //while(1);
-    flags = sendGameBoard(boardTheirs, 100);
+    //flags = sendGameBoard(boardTheirs, 100);
     //flags = tx_Handshake();
     printf("Game Board Sent!\n");
 	while (1)
@@ -164,7 +164,37 @@ int main(void)
 
         VGA_box(blue_x, blue_y, box_len, background_color);
         
-        //keyVal = getKey();
+        keyVal = getKey();
+        
+        if (keyVal == UP)
+            printf("UP\n");
+        else if (keyVal == DOWN)
+            printf("DOWN\n");
+        else if (keyVal == RIGHT)
+            printf("RIGHT\n");
+        else if (keyVal == LEFT)
+            printf("LEFT\n");
+		keyVal = getKey();
+        
+        if (keyVal == UP)
+            printf("UP\n");
+        else if (keyVal == DOWN)
+            printf("DOWN\n");
+        else if (keyVal == RIGHT)
+            printf("RIGHT\n");
+        else if (keyVal == LEFT)
+            printf("LEFT\n");
+		keyVal = getKey();
+        
+        if (keyVal == UP)
+            printf("UP\n");
+        else if (keyVal == DOWN)
+            printf("DOWN\n");
+        else if (keyVal == RIGHT)
+            printf("RIGHT\n");
+        else if (keyVal == LEFT)
+            printf("LEFT\n");
+		keyVal = getKey();
         
         if (keyVal == UP)
             printf("UP\n");

@@ -4,7 +4,7 @@
         <system_info filepath="true">..\hardware\nios_system.sopcinfo</system_info>
         <system_sof filepath="true">..\hardware\DE1_Media_Computer.sof</system_sof>
         <system_jdi filepath="true">..\hardware\DE1_Media_Computer.jdi</system_jdi>
-        <cable>USB-Blaster [USB-1]</cable>
+        <cable>USB-Blaster [USB-0]</cable>
         <processor JTAGHubInstanceID="0">CPU</processor>
         <elf_section name="text">
             <memory_device>SDRAM/s1</memory_device>

@@ -98,6 +98,8 @@ void take_turn() {
             if(editBoard[value] == water) {
                 editBoard[value] = miss;
                 //display message for miss
+                displayMenu("You Missed!",0);
+                displayBoard(editBoard, 0);
             }
             else{
                 previous = editBoard[value];
@@ -108,30 +110,35 @@ void take_turn() {
                     if(editBoard[100] & (1 << 0) == 1){
                         //display carrier sunk message
                         displayMenu("You sunk enemy carrier",0);
+                        displayBoard(editBoard, 0);
                     }
                     break;
                 case (battleship):
                     if(editBoard[100] & (1 << 1) == 1){
                         //display battleship
                         displayMenu("You sunk enemy battleship",0);
+                        displayBoard(editBoard, 0);
                     }
                     break;
                 case (submarine):
                     if(editBoard[100] & (1 << 2) == 1){
                         //display submarine sunk
                         displayMenu("You sunk enemy submarine",0);
+                        displayBoard(editBoard, 0);
                     }
                     break;
                 case (cruiser):
                     if(editBoard[100] & (1 << 3) == 1){
                         //display cruiser sunk
                         displayMenu("You sunk enemy cruiser",0);
+                        displayBoard(editBoard, 0);
                     }
                     break;
                 case (destroyer):
                     if(editBoard[100] & (1 << 4) == 1) {
                         //display sunk destroyer
                         displayMenu("You sunk enemy destroyer",0);
+                        displayBoard(editBoard, 0);
                     }
                     break;
                 }

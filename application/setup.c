@@ -14,7 +14,7 @@ void update_ship_position(int, int, int, int, int);
 void copy_arrays();
 void update_screen();
 
-extern volatile int player_number;
+extern volatile int player_number, aiIsPlaying;
 extern int player1[total_board_size];
 extern int player2[total_board_size];
 extern int player1_copy[total_board_size];
@@ -28,6 +28,7 @@ volatile int game_mode = 0;
  */
 int start_new_game()
 {
+    int count = 0;
     // display startup screen, select player menu
 
 	// select players
@@ -35,6 +36,21 @@ int start_new_game()
         // global variable will hold status of players
     //for now set to 2 player, so game_mode=0
     int menu_return = MENU_ESCAPE;
+    
+    int tmp_board[] = {
+            8,8,8,8,8,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,
+            16,0,0,0,0,0,0,64,0,0,
+            16,0,0,0,0,0,0,64,0,0,
+            16,0,0,0,0,0,0,64,0,0,
+            16,0,0,0,0,0,0,0,0,0,
+            0,0,0,32,32,32,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,128,
+            0,0,0,0,0,0,0,0,0,128
+        };
+        
+        
     do{
         game_mode = displayMenu("Select game mode", 2, "AI", "Human");
     } while(game_mode == menu_return);
@@ -44,8 +60,13 @@ int start_new_game()
             player_number = displayMenu("What player are you?", 2, "Player 1", "Player 2"); // set_player_number(); // function call
         } while(game_mode == menu_return);
 		// enter receive state to wait for users to define player 1
+        aiIsPlaying = 0;
 	}
-    else player_number = 1;//ai mode
+    else 
+    {
+        aiIsPlaying = 1;//ai mode
+        player_number = 1;
+    }
 	// function call to reset arrays
     printf("player number = %d\n", player_number);
 	reset_player_arrays();	
@@ -56,30 +77,30 @@ int start_new_game()
     
     // place ships on screen in turn
 	if (player_number == player_two){
-		// wait for player one to finish placing ships
-		//
-        //receiveGameBoard();
-		place_ships(player_two);
+        place_ships(player_one);
+		printf("fix me");
+		//receiveGameBoard();
 	}
+    if (aiIsPlaying == 1) {
+        printf("Our AI sucks dick!\n");
+        initialize_ai();
+        printf("Out init works...\n");
+        ai_place_ships();
+        //displayBoard(player2,1);
+    }
 	
    // if(game_mode == PLAYER) sendGameBoard();
 
-    if(player_number == player_one){
-        printf("We are getting here\n");
-        if(game_mode == PLAYER) {
-			place_ships(player_one);
-			printf("fix me");
-			//receiveGameBoard();
-		}
-        else {
-            printf("Our AI sucks dick!\n");
-            initialize_ai();
-            printf("Out init works...\n");
-            ai_place_ships();
-            displayBoard(player2,1);
+    if (player_number == player_one){
+        //place_ships(player_one);
+		printf("fix me");
+        for(count = 0; count < 100; ++count) {
+            player1[count] = tmp_board[count];
         }
+        displayBoard(player1,1);
+        displayBoard(player2,0);
     }
-
+    while(1);
     return game_mode;
 }
 

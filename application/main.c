@@ -93,7 +93,7 @@ int main()
             }
             else {
                 //ai takes turn
-                //ai_make_move();
+                ai_make_move();
             }
 		}		
 		if (player_number == player_two){

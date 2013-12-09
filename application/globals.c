@@ -12,6 +12,7 @@ volatile int timeout;								// used to synchronize with the timer
 
 
 volatile int player_number = 1; // default player 1
+volatile int aiIsPlaying = 0;
 
 /*
 	array element defines:

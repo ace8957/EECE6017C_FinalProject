@@ -101,8 +101,8 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
                 selection = numOptions;
         }
         else if(keyPress == DOWN) {
-            selection = (selection + 1)%numOptions;
-            if(selection == 0)
+            ++selection;
+            if(selection >= numOptions)
                 selection = 1;
         }
         // ignore other keys, no other options

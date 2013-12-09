@@ -121,7 +121,7 @@ void displayBoard(int board[], int yourBoard)
     int top = 0;
     int left = 0;
     int textWidthSpace = 10;
-    const char *rows[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+    const char *rows[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     const char *cols[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     if(yourBoard){
         x = left = 1;

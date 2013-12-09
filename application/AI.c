@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "AI.h"
 #include <string.h>
 
 /*

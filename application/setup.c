@@ -65,14 +65,17 @@ int start_new_game()
    // if(game_mode == PLAYER) sendGameBoard();
 
     if(player_number == player_one){
+        printf("We are getting here\n");
         if(game_mode == PLAYER) {
 			place_ships(player_one);
 			printf("fix me");
 			//receiveGameBoard();
 		}
         else {
-            //initialize_ai();
-            //ai_place_ships();
+            printf("Our AI sucks dick!\n");
+            initialize_ai();
+            printf("Out init works...\n");
+            ai_place_ships();
         }
     }
 
@@ -218,7 +221,7 @@ int set_player_number()
 }
 
 void update_ship_position(int ship,int ship_position_x,int ship_position_y,int vertical,int player){
-	int ship_size[number_of_ships] = {5,4,3,3,2}//{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
+	int ship_size[number_of_ships] = {5,4,3,3,2}; //{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
 	int current_ship_size = ship_size[ship];
 	int array_position = 0; int moving_array = 0;
 	int i = 0; int addition_value = 0;

@@ -15,6 +15,7 @@ extern int player2[total_board_size];
 extern int player1_copy[total_board_size];
 extern int player2_copy[total_board_size];
 extern volatile int timeout;
+int counter;
 
 
 // main function
@@ -33,7 +34,7 @@ int main()
 	timeout = 0;										// synchronize with the timer
 
     /* set the interval timer period for scrolling the HEX displays */
-	int counter = 0x960000;				// 1/(50 MHz) x (0x960000) ~= 200 msec
+	counter = 0x960000;				// 1/(50 MHz) x (0x960000) ~= 200 msec
 	*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
 	*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
 

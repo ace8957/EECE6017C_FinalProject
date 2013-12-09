@@ -72,9 +72,7 @@ int start_new_game()
 			//receiveGameBoard();
 		}
         else {
-            printf("Our AI sucks dick!\n");
             initialize_ai();
-            printf("Out init works...\n");
             ai_place_ships();
             displayBoard(player2,1);
         }

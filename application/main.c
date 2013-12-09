@@ -74,7 +74,6 @@ int main()
 			new_game = 0; // reset new game flag
 			// function call to reset arrays
 		}
-		return 0;
 		// player one take turn
 		if (player_number == player_two){
 			receiveGameBoard(player1, total_board_size);

@@ -12,6 +12,7 @@ void reset_player_arrays();
 void place_ships(int player);
 void update_ship_position(int, int, int, int, int);
 void copy_arrays();
+void or_arrays();
 void update_screen();
 
 extern volatile int player_number;
@@ -114,12 +115,17 @@ void place_ships(int player)
 	update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 	
 	for (i=0; i<number_of_ships;i++){
-        placed = 0;
+        ship_position[0] = ship_position[1] = 0;
+		placed = 0;
 		current_length_max = board_size - ship_size[i];
 		current_width_max = board_size - 1;
 		// dont move the ship if it is against the sides of the board
         while(!placed){
 			key_value = getKey();
+			printf("array_position = %d\n", array_position);
+			if (array_position == 0){
+				player1_copy[ship_size[i]] = water;
+			}
 			array_position = ship_position[x_axis] + (ship_position[y_axis] * 10);
 			update_ship_position(i, array_position, old_array_position, vertical, player);
 			switch (key_value){
@@ -133,14 +139,14 @@ void place_ships(int player)
 									player2_copy[array_position + j] = water;
 								}
 							}
-						old_array_position = array_position + current_length_max - 1;
+						old_array_position = array_position + ship_size[i] - 1;
 						ship_position[y_axis] = ship_position[y_axis] - 1;
                     }
 					break;
 				case DOWN:
-					old_array_position = array_position;
 					if (vertical) {
 						if (ship_position[y_axis] < current_length_max){
+							old_array_position = array_position;
 							ship_position[y_axis] = ship_position[y_axis] + 1;
 							for (j = 0;j<ship_size[i];j++){
 								if (player_number == player_one){
@@ -154,6 +160,7 @@ void place_ships(int player)
                     }
 					else {
 						if (ship_position[y_axis] < current_width_max){
+							old_array_position = array_position;
 							ship_position[y_axis] = ship_position[y_axis] + 1;
 							for (j = 0;j<ship_size[i];j++){
 								if (player_number == player_one){
@@ -167,9 +174,13 @@ void place_ships(int player)
                     }
 					break;
 				case LEFT:
-					if (ship_position[x_axis] > 0)
-						old_array_position = array_position + current_length_max-1;
+					if (ship_position[x_axis] > 0){
+						old_array_position = array_position + ship_size[i] - 1;
 						ship_position[x_axis] = ship_position[x_axis] - 1;
+					}
+					if (array_position == 0){
+						player2_copy[5] = water;
+					}
 					break;
 				case RIGHT:
 					if (!vertical) {
@@ -198,7 +209,7 @@ void place_ships(int player)
                     }
 					break;
                 case ENTER:
-                    x = ship_position[x_axis] + 10*ship_position[y];//position in the array
+                    x = ship_position[x_axis] + 10*ship_position[y_axis];//position in the array
                     if(player_number == player_one) editBoard = player1;
                     else editBoard = player2;
                     for(n=0;n<ship_size[i];n++){
@@ -209,21 +220,22 @@ void place_ships(int player)
                         placed =1;
                         if(vertical){//checking by adding to y's
                             x = x + 10;
-                            if(x > 99){
-                                printf("math error occured");
+                            if(x > 100){
+                                printf("math error occured\n");
                                 placed = 0;
                                 break;
                             }
                         }
                         else {
                             x = x + 1;
-                            if(x%10 == 0){
-                                printf("math error occured");
+                            if(x%10 == 0 && (n+1 < ship_size[i])){
+                                printf("math2 error occured\n");
                                 placed = 0;
                                 break;
                             }
                         }
                     }
+					printf("player1 array = %d\n",player1);
                     break;
 				default:
 					break;
@@ -274,7 +286,8 @@ void update_ship_position(int ship,int array_position,int old_array_position,int
 	if ((player == player_two) && (array_position)){
 		player2_copy[old_array_position] = water;
 	}
-	copy_arrays();
+	//copy_arrays();
+	or_arrays();
 	update_screen();
 }
 
@@ -287,13 +300,27 @@ void copy_arrays(){
 	}
 }
 
+void or_arrays(){
+	int i = 0;
+	
+	for (i=0; i<total_board_size-1; i++){
+		if (player1[i] != water){
+			player1_copy[i] = player1[i];
+		}
+		if (player2[i] != water){
+			player2_copy[i] = player2[i];
+		}
+	}
+}
+
+
 void update_screen(){
 	if (player_number == player_one){
-		displayBoard((int *) player1, SHOW_SHIPS);
-		displayBoard((int *) player2, NO_SHIPS);
+		displayBoard((int *) player1_copy, SHOW_SHIPS);
+		displayBoard((int *) player2_copy, NO_SHIPS);
 	}
 	if (player_number == player_two){
-		displayBoard((int *) player2, SHOW_SHIPS);
-		displayBoard((int *) player1, NO_SHIPS);
+		displayBoard((int *) player2_copy, SHOW_SHIPS);
+		displayBoard((int *) player1_copy, NO_SHIPS);
 	}
 }

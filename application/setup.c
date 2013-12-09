@@ -59,18 +59,19 @@ int start_new_game()
 	if (player_number == player_two){
 		// wait for player one to finish placing ships
 		//
-        //receiveGameBoard();
+        receiveGameBoard(player1, total_board_size);
 		place_ships(player_two);
 	}
 	
-   // if(game_mode == PLAYER) sendGameBoard();
+    if(game_mode == PLAYER) sendGameBoard(player2, total_board_size);
 
     if(player_number == player_one){
         printf("We are getting here\n");
         if(game_mode == PLAYER) {
 			place_ships(player_one);
+			sendGameBoard(player1, total_board_size);
 			printf("fix me");
-			//receiveGameBoard();
+			receiveGameBoard(player2, total_board_size);
 		}
         else {
             printf("Our AI sucks dick!\n");

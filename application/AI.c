@@ -37,21 +37,9 @@
 	
 */
 
-//Global constant definitions
-#define IS_HIT 2
-#define IS_MISS 1
-#define SHIP_MASK 0xF8
-#define NONE -1
-
 //externs
 extern int player1[total_board_size];
 extern int player2[total_board_size];
-
-//Local Globals variables
-int ai_game_board[total_board_size-1];
-int locality_count = 0;//used to determine the next attack direction when searching around a 
-int last_attack = NONE;
-int last_hit = NONE;
 
 int initialize_ai(void) {
 	//we must set the initial values of our internal game board to 0

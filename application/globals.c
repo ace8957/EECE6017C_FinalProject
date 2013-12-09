@@ -45,3 +45,5 @@ volatile int player_number = 1; // default player 1
 */
 int player1[total_board_size];
 int player2[total_board_size];
+int player1_copy[total_board_size];
+int player2_copy[total_board_size];

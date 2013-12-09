@@ -12,6 +12,12 @@
 
 #define number_of_ships	5
 
+#define carrier_num   	0
+#define battleship_num	1
+#define submarine_num	2
+#define cruiser_num		3
+#define destroyer_num	4
+
 //board size 101: 100 for the board and 1 for status of remaining ships
 #define total_board_size	101
 #define board_size		 	10

@@ -9,12 +9,14 @@
 #define initial_position	0
 
 void reset_player_arrays();
-void place_ships();
-void update_ship_position(ship,ship_position_x,ship_position_y,vertical);
+void place_ships(int player);
+void update_ship_position(int, int, int, int, int);
 
 extern volatile int player_number;
 extern volatile int player1[total_board_size];
 extern volatile int player2[total_board_size];
+extern volatile int player1_copy[total_board_size];
+extern volatile int player2_copy[total_board_size];
 
 volatile int game_mode = 0;
 
@@ -52,12 +54,17 @@ int start_new_game()
 		// wait for player one to finish placing ships
 		//
         //receiveGameBoard();
+		place_ships(player_two);
 	}
-	place_ships();
+	
    // if(game_mode == PLAYER) sendGameBoard();
 
     if(player_number == player_one){
-        if(game_mode == PLAYER) printf("fix me");//receiveGameBoard();
+        if(game_mode == PLAYER) {
+			place_ships(player_one);
+			printf("fix me");
+			//receiveGameBoard();
+		}
         else {
             //initialize_ai();
             //ai_place_ships();
@@ -73,10 +80,12 @@ void reset_player_arrays()
 	for (i = 0; i<board_size; i++){
 		player1[i] = water;
 		player2[i] = water;
+		player1_copy[i] = water;
+		player2_copy[i] = water;
 	}
 }
 
-void place_ships()
+void place_ships(int player)
 {
 	int ship_size[number_of_ships] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
 	int current_length_max; // coincides with maximum amount of movement of ship longways
@@ -93,14 +102,14 @@ void place_ships()
 	for (i=0; i<number_of_ships;i++){
 		current_length_max = board_size - ship_size[i];
 		current_width_max = board_size - 1;
-		
+		// dont move the ship if it is against the sides of the board
         while(!placed){
 			key_value = getKey();
 			switch (key_value){
 				case UP:
 					if (ship_position[y_axis] > 0)					
 						ship_position[y_axis] = ship_position[y_axis] - 1;
-						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical);
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					break;
 				case DOWN:
 					if (vertical)
@@ -187,9 +196,25 @@ int set_player_number()
     return -1;//error occured
 }
 
-void update_ship_position(ship,ship_position_x,ship_position_y,orientation){
-	int current_ship_size = ship_size(ship);
+void update_ship_position(int ship,int ship_position_x,int ship_position_y,int vertical,int player){
+	int ship_size[number_of_ships] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
+	int current_ship_size = ship_size[ship];
+	int array_position = 0;
+	int i = 0;
+	int current_ship[number_of_ships] = {carrier, battleship, submarine, cruiser, destroyer};
+	
 	if (vertical){
-		// figure out 
+		// change the value of the row not the column
+		array_position = ship_position_x + (ship_position_y * 10);
+				
+		for (i = 0; i<current_ship_size; i++){
+			if (player == player_one){
+				player1_copy[array_position] = current_ship[i];
+			}
+			if (player == player_two){
+				player2_copy[array_position] = current_ship[i];
+			}
+			array_position = array_position + 10;
+		}
 	}
 }

@@ -88,8 +88,14 @@ void take_turn() {
             break;
         }
         value = x + (10 * y);
-        if(player_number == player_one) editBoard = player2;
-        else    editBoard = player1;
+        if(player_number == player_one) {
+			editBoard = player2;
+			otherBoard = player1;
+		}
+        else {
+			editBoard = player1;
+			otherBoard = player2;
+		}
         if(editBoard[value] != hit || editBoard[value] != miss){//if valid position not picked already
             valid = 1;
         }
@@ -99,7 +105,9 @@ void take_turn() {
                 editBoard[value] = miss;
                 //display message for miss
                 displayMenu("You Missed!",0);
-                displayBoard(editBoard, 0);
+                clearColorBuf(); clearTextBuf();
+				displayBoard(editBoard, 0);
+				displayBoard(otherboard, 1);
             }
             else{
                 previous = editBoard[value];
@@ -117,28 +125,36 @@ void take_turn() {
                     if(editBoard[100] & (1 << 1) == 1){
                         //display battleship
                         displayMenu("You sunk enemy battleship",0);
-                        displayBoard(editBoard, 0);
+                        clearColorBuf(); clearTextBuf();
+						displayBoard(editBoard, 0);
+						displayBoard(otherboard, 1);
                     }
                     break;
                 case (submarine):
                     if(editBoard[100] & (1 << 2) == 1){
                         //display submarine sunk
                         displayMenu("You sunk enemy submarine",0);
-                        displayBoard(editBoard, 0);
+                        clearColorBuf(); clearTextBuf();
+						displayBoard(editBoard, 0);
+						displayBoard(otherboard, 1);
                     }
                     break;
                 case (cruiser):
                     if(editBoard[100] & (1 << 3) == 1){
                         //display cruiser sunk
                         displayMenu("You sunk enemy cruiser",0);
-                        displayBoard(editBoard, 0);
+                        clearColorBuf(); clearTextBuf();
+						displayBoard(editBoard, 0);
+						displayBoard(otherboard, 1);
                     }
                     break;
                 case (destroyer):
                     if(editBoard[100] & (1 << 4) == 1) {
                         //display sunk destroyer
                         displayMenu("You sunk enemy destroyer",0);
-                        displayBoard(editBoard, 0);
+                        clearColorBuf(); clearTextBuf();
+						displayBoard(editBoard, 0);
+						displayBoard(otherboard, 1);
                     }
                     break;
                 }

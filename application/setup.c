@@ -93,11 +93,13 @@ void place_ships(int player)
 	int vertical = 0; // 0 for ship along x-axis, 1 for ship along y-axis
 	int ship_position[2] = {initial_position, initial_position}; // start at 0,0 -> A0
 	int key_value = NOP; // the key value from the keyboard
-    int i, n;//loop variables
+    int i = 0, n;//loop variables
     int x, y;// x and y position for checking
     int next_position;//the value to add to get to the next position
     int placed =0;
 	
+	// print the ship on the screen to start out
+	update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 	
 	for (i=0; i<number_of_ships;i++){
 		current_length_max = board_size - ship_size[i];
@@ -211,9 +213,15 @@ void update_ship_position(int ship,int ship_position_x,int ship_position_y,int v
 	for (i = 0; i<current_ship_size; i++){
 		if (player == player_one){
 			player1_copy[array_position] = current_ship[i];
+			if (array_position){	
+				player1_copy[array_position - addition_value] = water;
+			}
 		}
 		if (player == player_two){
 			player2_copy[array_position] = current_ship[i];
+			if (array_position){	
+				player2_copy[array_position - addition_value] = water;
+			}
 		}
 		array_position = array_position + addition_value; // incremement to the next array position
 	}

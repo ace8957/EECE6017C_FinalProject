@@ -169,15 +169,18 @@ void place_ships(int player)
 						ship_position[x_axis] = ship_position[x_axis] - 1;
 					break;
 				case RIGHT:
-					old_array_position = array_position;
 					if (!vertical) {
-						if (ship_position[x_axis] < current_length_max)
+						if (ship_position[x_axis] < current_length_max){
+							old_array_position = array_position;
 							ship_position[x_axis] = ship_position[x_axis] + 1;
+						}
                     }
 					else {
-						if (ship_position[x_axis] < current_width_max)
+						if (ship_position[x_axis] < current_width_max){
+							old_array_position = array_position;
 							ship_position[x_axis] = ship_position[x_axis] + 1;
-                    }
+						}
+					}
 					break;
 				case SPACE:
 					// check ship position and size

@@ -58,3 +58,16 @@ void drawBox(int x, int y, int width, int height, struct color c)
 		}
 	}
 }
+
+void clearColorBuf()
+{
+    drawBox(0, 0, VGA_WIDTH, VGA_HEIGHT, colorRGB(0, 0, 0));
+}
+
+void clearTextBuf()
+{
+    int y;
+    for(y = 0; y < VGA_HEIGHT; y = y + 8) {
+        drawText(0, y, "                                        ");
+    }
+}

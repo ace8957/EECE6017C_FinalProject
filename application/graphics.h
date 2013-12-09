@@ -39,4 +39,14 @@ void drawText(int x, int y, const char * text_ptr);
  */
 void drawBox(int x, int y, int width, int height, struct color c);
 
+/**
+ * Clear the color buffer
+ */
+void clearColorBuf();
+
+/**
+ * Clear the text buffer
+ */
+void clearTextBuf();
+
 #endif //GRAPHICS_H

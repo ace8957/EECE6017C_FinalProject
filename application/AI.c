@@ -44,7 +44,10 @@ extern int player2[total_board_size];
 
 int initialize_ai(void) {
 	//we must set the initial values of our internal game board to 0
-	memset(ai_game_board, 0, sizeof(ai_game_board));
+    int count;
+    for(count = 0; count < (total_board_size-1); ++count) {
+        ai_game_board[count] = 0;
+    }
 	return 0;
 }
 

@@ -66,8 +66,12 @@ void clearColorBuf()
 
 void clearTextBuf()
 {
-    int y;
-    for(y = 0; y < VGA_HEIGHT; y = y + 8) {
-        drawText(0, y, "                                        ");
+    int y, x;
+    for(y = 0; y < VGA_HEIGHT; y++) 
+    {
+        for (x = 0; x < VGA_WIDTH; x++)
+        {
+            drawText(x, y, " ");
+        }
     }
 }

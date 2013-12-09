@@ -49,7 +49,11 @@ int start_new_game()
 	// function call to reset arrays
     printf("player number = %d\n", player_number);
 	reset_player_arrays();	
-	return 1;
+	
+    // Now clear the screen for the place ships part
+    clearColorBuf();
+    clearTextBuf();
+    
     // place ships on screen in turn
 	if (player_number == player_two){
 		// wait for player one to finish placing ships

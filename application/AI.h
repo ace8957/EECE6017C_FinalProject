@@ -7,6 +7,11 @@
 #define SHIP_MASK 0xF8
 #define NONE -1
 
+#define NORTH 0
+#define SOUTH 1
+#define EAST 2
+#define WEST 3
+
 int initialize_ai(void);
 void ai_place_ships(void);
 int ai_make_move(void);

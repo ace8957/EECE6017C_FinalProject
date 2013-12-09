@@ -27,7 +27,7 @@
  *  SERIAL_SUCCESS - the game board was sent successfuly
  *  SERIAL_FAIL - the game board failed to send.
  */
-int sendGameBoard(int gameBoard[], int length)
+int sendGameBoard(volatile int gameBoard[], int length)
 {
     int i = 0;
     char charGameBoard[total_board_size];
@@ -68,7 +68,7 @@ int sendGameBoard(int gameBoard[], int length)
  *  SERIAL_SUCCESS - the game board was received successfuly
  *  SERIAL_FAIL - the game board failed to receive.
  */
-int receiveGameBoard(int gameBoard[], int length)
+int receiveGameBoard(volatile int gameBoard[], int length)
 {
     unsigned int data_reg;
     unsigned char *data;

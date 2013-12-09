@@ -5,8 +5,8 @@
 #define SERIAL_FAIL     1
 
 // API calls
-int sendGameBoard(int gameBoard[], int length);
-int receiveGameBoard(int gameBoard[], int length);
+int sendGameBoard(volatile int gameBoard[], int length);
+int receiveGameBoard(volatile int gameBoard[], int length);
 
 // Helper functions
 int sendSerialMessage(unsigned char);

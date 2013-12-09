@@ -77,7 +77,7 @@ int start_new_game()
 void reset_player_arrays()
 {
 	int i;
-	for (i = 0; i<board_size; i++){
+	for (i = 0; i<total_board_size; i++){
 		player1[i] = water;
 		player2[i] = water;
 		player1_copy[i] = water;
@@ -168,7 +168,7 @@ void place_ships(int player)
                             }
                         }
                         else {
-                            x = x+1;
+                            x = x + 1;
                             if(x%10 == 0){
                                 printf("math error occured");
                                 placed = 0;
@@ -200,21 +200,31 @@ void update_ship_position(int ship,int ship_position_x,int ship_position_y,int v
 	int ship_size[number_of_ships] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
 	int current_ship_size = ship_size[ship];
 	int array_position = 0;
-	int i = 0;
+	int i = 0; int addition_value = 0;
 	int current_ship[number_of_ships] = {carrier, battleship, submarine, cruiser, destroyer};
 	
-	if (vertical){
-		// change the value of the row not the column
-		array_position = ship_position_x + (ship_position_y * 10);
-				
-		for (i = 0; i<current_ship_size; i++){
-			if (player == player_one){
-				player1_copy[array_position] = current_ship[i];
-			}
-			if (player == player_two){
-				player2_copy[array_position] = current_ship[i];
-			}
-			array_position = array_position + 10;
+	if (vertical) addition_value = 10;  // for incrementing the row
+	else addition_value = 1;  // for incrementing the column
+
+	array_position = ship_position_x + (ship_position_y * 10);
+			
+	for (i = 0; i<current_ship_size; i++){
+		if (player == player_one){
+			player1_copy[array_position] = current_ship[i];
 		}
+		if (player == player_two){
+			player2_copy[array_position] = current_ship[i];
+		}
+		array_position = array_position + addition_value; // incremement to the next array position
+	}
+	copy_arrays();
+}
+
+void copy_arrays(){
+	int i = 0;
+	
+	for (i=0; i<total_board_size; i++){
+		player1[i] = player1_copy[i];
+		player2[i] = player2_copy[i];
 	}
 }

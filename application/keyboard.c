@@ -112,56 +112,6 @@ int getKey(void)
 		keyboardLock = 0;
 		return NINE;
 	}
-	else if(keyPressed == Akey)
-	{
-		keyboardLock = 0;
-		return Akey;
-	}
-	else if(keyPressed == Bkey)
-	{
-		keyboardLock = 0;
-		return Bkey;
-	}
-	else if(keyPressed == Ckey)
-	{
-		keyboardLock = 0;
-		return Ckey;
-	}
-	else if(keyPressed == Dkey)
-	{
-		keyboardLock = 0;
-		return Dkey;
-	}
-	else if(keyPressed == Ekey)
-	{
-		keyboardLock = 0;
-		return Ekey;
-	}
-	else if(keyPressed == Fkey)
-	{
-		keyboardLock = 0;
-		return Fkey;
-	}
-	else if(keyPressed == Gkey)
-	{
-		keyboardLock = 0;
-		return Gkey;
-	}
-	else if(keyPressed == Hkey)
-	{
-		keyboardLock = 0;
-		return Hkey;
-	}
-	else if(keyPressed == Ikey)
-	{
-		keyboardLock = 0;
-		return Ikey;
-	}
-	else if(keyPressed == Jkey)
-	{
-		keyboardLock = 0;
-		return Jkey;
-	}
 	else
 	{
 		keyboardLock = 0;

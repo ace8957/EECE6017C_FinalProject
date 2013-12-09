@@ -101,7 +101,7 @@ void place_ships(int player)
 	int vertical = 0; // 0 for ship along x-axis, 1 for ship along y-axis
 	int ship_position[2] = {initial_position, initial_position}; // start at 0,0 -> A0
 	int key_value = NOP; // the key value from the keyboard
-    int i = 0, n;//loop variables
+    int i = 0, j = 0, n;//loop variables
     int x, y;// x and y position for checking
     int next_position;//the value to add to get to the next position
     int placed =0;
@@ -122,6 +122,14 @@ void place_ships(int player)
 			switch (key_value){
 				case UP:
 					if (ship_position[y_axis] > 0) {			
+						for (j = 0;j<ship_size[i];j++){
+								if (player_number == player_one){
+									player1_copy[array_position + j] = water;
+								}
+								if (player_number == player_two){
+									player2_copy[array_position + j] = water;
+								}
+							}
 						old_array_position = array_position + current_length_max - 1;
 						ship_position[y_axis] = ship_position[y_axis] - 1;
                     }
@@ -129,18 +137,35 @@ void place_ships(int player)
 				case DOWN:
 					old_array_position = array_position;
 					if (vertical) {
-						if (ship_position[y_axis] < current_length_max)
+						if (ship_position[y_axis] < current_length_max){
 							ship_position[y_axis] = ship_position[y_axis] + 1;
-							
+							for (j = 0;j<ship_size[i];j++){
+								if (player_number == player_one){
+									player1_copy[array_position + j] = water;
+								}
+								if (player_number == player_two){
+									player2_copy[array_position + j] = water;
+								}
+							}
+						}	
                     }
 					else {
-						if (ship_position[y_axis] < current_width_max)
+						if (ship_position[y_axis] < current_width_max){
 							ship_position[y_axis] = ship_position[y_axis] + 1;
+							for (j = 0;j<ship_size[i];j++){
+								if (player_number == player_one){
+									player1_copy[array_position + j] = water;
+								}
+								if (player_number == player_two){
+									player2_copy[array_position + j] = water;
+								}
+							}
+						}
                     }
 					break;
 				case LEFT:
 					if (ship_position[x_axis] > 0)
-						old_array_position = array_position + current_length_max - 1;
+						old_array_position = array_position + current_length_max;
 						ship_position[x_axis] = ship_position[x_axis] - 1;
 					break;
 				case RIGHT:
@@ -219,13 +244,9 @@ int set_player_number()
     return -1;//error occured
 }
 
-<<<<<<< Updated upstream
-void update_ship_position(int ship,int ship_position_x,int ship_position_y,int vertical,int player){
-	int ship_size[number_of_ships] = {5,4,3,3,2}; //{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
-=======
+
 void update_ship_position(int ship,int array_position,int old_array_position,int vertical,int player){
-	int ship_size[number_of_ships] = {5,4,3,3,2}//{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
->>>>>>> Stashed changes
+	int ship_size[number_of_ships] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
 	int current_ship_size = ship_size[ship];
 	int moving_array = 0;
 	int i = 0; int addition_value = 0;
@@ -248,10 +269,10 @@ void update_ship_position(int ship,int array_position,int old_array_position,int
 	}
 	
 	if ((player == player_one) && (array_position)){
-		player1_copy[array_position - addition_value] = water;
+		player1_copy[old_array_position] = water;
 	}
 	if ((player == player_two) && (array_position)){
-		player2_copy[array_position - addition_value] = water;
+		player2_copy[old_array_position] = water;
 	}
 	copy_arrays();
 	update_screen();
@@ -269,10 +290,10 @@ void copy_arrays(){
 void update_screen(){
 	if (player_number == player_one){
 		displayBoard((int *) player1, SHOW_SHIPS);
-		displayBoard((int *) player2, NO_SHIPS);
+		//displayBoard((int *) player2, NO_SHIPS);
 	}
 	if (player_number == player_two){
 		displayBoard((int *) player2, SHOW_SHIPS);
-		displayBoard((int *) player1, NO_SHIPS);
+		//displayBoard((int *) player1, NO_SHIPS);
 	}
 }

@@ -118,13 +118,16 @@ void place_ships(int player)
 					if (vertical)
 						if (ship_position[y_axis] < current_length_max)
 							ship_position[y_axis] = ship_position[y_axis] + 1;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					else
 						if (ship_position[y_axis] < current_width_max)
-							ship_position[y_axis] = ship_position[y_axis] + 1;					
+							ship_position[y_axis] = ship_position[y_axis] + 1;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);					
 					break;
 				case LEFT:
 					if (ship_position[x_axis] > 0)
 						ship_position[x_axis] = ship_position[x_axis] - 1;
+					update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					break;
 				case RIGHT:
 					// check location of ship for valid movement
@@ -132,9 +135,11 @@ void place_ships(int player)
 					if (!vertical)
 						if (ship_position[x_axis] < current_length_max)
 							ship_position[x_axis] = ship_position[x_axis] + 1;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					else
 						if (ship_position[x_axis] < current_width_max)
 							ship_position[x_axis] = ship_position[x_axis] + 1;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					break;
 				case SPACE:
 					// check ship position and size
@@ -142,9 +147,11 @@ void place_ships(int player)
 					if(vertical)
 						if (ship_position[x_axis] < current_length_max)						
 							vertical = 0;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					else
 						if (ship_position[y_axis] < current_length_max)
 							vertical = 1;
+						update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 					break;
                 case ENTER:
                     x = ship_position[x_axis] + 10*ship_position[y];//position in the array

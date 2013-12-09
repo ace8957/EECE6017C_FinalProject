@@ -30,7 +30,7 @@ volatile int game_mode = 0;
 int start_new_game()
 {
     // display startup screen, select player menu
-
+	int k = 0;
 	// select players
 		// either 2 players or 1 player against AI
         // global variable will hold status of players
@@ -69,9 +69,13 @@ int start_new_game()
         printf("We are getting here\n");
         if(game_mode == PLAYER) {
 			place_ships(player_one);
+			for (k=0;k<total_board_size;k++){
+				printf("player1[%d] = %d\n",k,player1[k]);
+			}
 			sendGameBoard(player1, total_board_size);
 			printf("fix me");
 			receiveGameBoard(player2, total_board_size);
+			printf("fix me still");
 		}
         else {
             printf("Our AI sucks dick!\n");
@@ -98,6 +102,7 @@ void reset_player_arrays()
 
 void place_ships(int player)
 {
+	int current_ship[number_of_ships] = {carrier, battleship, submarine, cruiser, destroyer};
 	int ship_size[number_of_ships] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
 	int current_length_max; // coincides with maximum amount of movement of ship longways
 	int current_width_max; // coincides with maximum amount of ship movement sideways
@@ -110,7 +115,7 @@ void place_ships(int player)
     int placed =0;
 	int array_position = ship_position[x_axis] + (ship_position[y_axis] * 10);
 	int old_array_position = 0;
-    int *editBoard;
+    int *editBoard, *copyBoard;
 	
 	// print the ship on the screen to start out
 	update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
@@ -211,14 +216,22 @@ void place_ships(int player)
 					break;
                 case ENTER:
                     x = ship_position[x_axis] + 10*ship_position[y_axis];//position in the array
-                    if(player_number == player_one) editBoard = player1;
-                    else editBoard = player2;
+                    if(player_number == player_one) {
+						editBoard = player1;
+						copyBoard = player1_copy;
+					}
+                    else  {
+						editBoard = player2;
+						copyBoard = player2_copy;
+					}
+					
                     for(n=0;n<ship_size[i];n++){
                         if(editBoard[x] != water){
                             placed = 0;
                             break;//no need to check everything else if this isn't on water
                         }
                         placed =1;
+						editBoard[x] = current_ship[i];
                         if(vertical){//checking by adding to y's
                             x = x + 10;
                             if(x > 100){
@@ -235,8 +248,9 @@ void place_ships(int player)
                                 break;
                             }
                         }
+						//editBoard[x] = copyBoard[x];
+						printf("player1 array[%d] = %d\n",x,player1[x]);
                     }
-					printf("player1 array = %d\n",player1);
                     break;
 				default:
 					break;

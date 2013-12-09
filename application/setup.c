@@ -108,11 +108,13 @@ void place_ships(int player)
     int placed =0;
 	int array_position = ship_position[x_axis] + (ship_position[y_axis] * 10);
 	int old_array_position = 0;
+    int *editBoard;
 	
 	// print the ship on the screen to start out
 	update_ship_position(i, ship_position[x_axis], ship_position[y_axis], vertical, player);
 	
 	for (i=0; i<number_of_ships;i++){
+        placed = 0;
 		current_length_max = board_size - ship_size[i];
 		current_width_max = board_size - 1;
 		// dont move the ship if it is against the sides of the board
@@ -197,18 +199,12 @@ void place_ships(int player)
 					break;
                 case ENTER:
                     x = ship_position[x_axis] + 10*ship_position[y];//position in the array
+                    if(player_number == player_one) editBoard = player1;
+                    else editBoard = player2;
                     for(n=0;n<ship_size[i];n++){
-                        if(player_number == player_one){
-                            if(player1[x] != water){
-                                placed =0;
-                                break;
-                            }
-                        }
-                        else {
-                            if(player2[x] != water) {
-                                placed =0;
-                                break;
-                            }
+                        if(editBoard[x] != water){
+                            placed = 0;
+                            break;//no need to check everything else if this isn't on water
                         }
                         placed =1;
                         if(vertical){//checking by adding to y's

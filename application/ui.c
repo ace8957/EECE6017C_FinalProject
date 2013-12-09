@@ -65,18 +65,23 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
    
     int keyPress;
     do {
-        // Draw the selection background
-        optionX = menuX+(menuWidth-optionBoxWidth)/2;
-        optionY = menuY+selection*optionBoxHeight + (optionBoxSeparation);
-        drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
-
         optionX = menuX+(menuWidth-optionBoxWidth+optionBoxSeparation)/2;
         // Draw the options in their own boxes, with the first option highlighted
-        for(i = 0; i < numOptions; ++i) {
+        for(i = 1; i < numOptions; ++i) {
+            // Draw the selection background
+            optionX = menuX+(menuWidth-optionBoxWidth)/2;
+            optionY = menuY+selection*optionBoxHeight + (optionBoxSeparation/2);
+            if(i == selection) {
+                drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
+            }
+            else {
+                drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(11, 10, 177));
+            }
+
             textLen = strlen(optionList[i])*charWidth;
-            optionY = menuY+(i+1)*(optionBoxHeight+optionBoxSeparation/2);
+            optionY = menuY+(i+1)*(optionBoxHeight+optionBoxSeparation);
             drawBox(optionX, optionY+(optionBoxSeparation/2), optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
-            drawText(optionX+(optionBoxWidth-textLen)/2, optionY+(optionBoxHeight), optionList[i]);
+            drawText(optionX+(optionBoxWidth-textLen)/2, optionY+(optionBoxHeight/4), optionList[i]);
         }
 
         keyPress = getKey();
@@ -88,14 +93,14 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
             break;
         }
         else if(keyPress == UP) {
-            selection = (selection + 1)%numOptions;
-            if(selection == 0)
-                selection = 1;
-        }
-        else if(keyPress == DOWN) {
             --selection;
             if(selection == 0)
                 selection = numOptions;
+        }
+        else if(keyPress == DOWN) {
+            selection = (selection + 1)%numOptions;
+            if(selection == 0)
+                selection = 1;
         }
         // ignore other keys, no other options
     }

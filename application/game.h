@@ -4,4 +4,6 @@
 void take_turn();
 void check_status();
 
+
+
 #endif //GAME_H

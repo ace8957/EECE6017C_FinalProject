@@ -10,6 +10,7 @@ volatile int change;							//ps/2 bool flag for buffer change
 
 volatile int timeout;								// used to synchronize with the timer
 
+
 volatile int player_number = 1; // default player 1
 
 /*

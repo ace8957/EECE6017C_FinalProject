@@ -218,9 +218,9 @@ int set_player_number()
 }
 
 void update_ship_position(int ship,int ship_position_x,int ship_position_y,int vertical,int player){
-	int ship_size[number_of_ships] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
+	int ship_size[number_of_ships] = {5,4,3,3,2}//{carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
 	int current_ship_size = ship_size[ship];
-	int array_position = 0;
+	int array_position = 0; int moving_array = 0;
 	int i = 0; int addition_value = 0;
 	int current_ship[number_of_ships] = {carrier, battleship, submarine, cruiser, destroyer};
 	
@@ -228,21 +228,23 @@ void update_ship_position(int ship,int ship_position_x,int ship_position_y,int v
 	else addition_value = 1;  // for incrementing the column
 
 	array_position = ship_position_x + (ship_position_y * 10);
-			
+	moving_array = 	array_position;
+	
 	for (i = 0; i<current_ship_size; i++){
 		if (player == player_one){
-			player1_copy[array_position] = current_ship[i];
-			if (array_position){	
-				player1_copy[array_position - addition_value] = water;
-			}
+			player1_copy[moving_array] = current_ship[ship];
 		}
 		if (player == player_two){
-			player2_copy[array_position] = current_ship[i];
-			if (array_position){	
-				player2_copy[array_position - addition_value] = water;
-			}
+			player2_copy[moving_array] = current_ship[i];
 		}
-		array_position = array_position + addition_value; // incremement to the next array position
+		moving_array = moving_array + addition_value; // incremement to the next array position
+	}
+	
+	if ((player == player_one) && (array_position)){
+		player1_copy[array_position - addition_value] = water;
+	}
+	if ((player == player_two) && (array_position)){
+		player2_copy[array_position - addition_value] = water;
 	}
 	copy_arrays();
 	update_screen();

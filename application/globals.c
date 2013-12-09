@@ -1,7 +1,7 @@
 #include "globals.h"
 
 /* global variables */
-volatile char byte1, byte2, byte3, byte4;				// PS/2 variables
+volatile char byte1, byte2, byte3, byte4;				/	/ PS/2 variables
 volatile char packet1, packetX, packetY;		//part of the PS/2 mouse packets
 volatile char kbBuf[KB_BUF_SIZE];             // Keyboard input buffer
 volatile unsigned int kbBufBegin = 0;

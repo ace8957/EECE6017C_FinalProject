@@ -21,8 +21,8 @@ void take_turn() {
             y = getKey();
             x = getKey();
         }while(x != ONE && x != TWO && x != THREE && x != FOUR && x != FIVE && x != SIX && x != SEVEN &&
-                x != EIGHT && x != NINE && x!= ZERO && y != Akey && y != Bkey && y!= Ckey && y != Dkey && y!= Ekey
-                && y != Fkey && y != Gkey && y != Hkey && y != Ikey && y != Jkey);
+                x != EIGHT && x != NINE && x!= ZERO && y != ZERO && y != ONE && y!= TWO && y != THREE && y!= FOUR
+                && y != FIVE && y != SIX && y != SEVEN && y != EIGHT && y != NINE);
         switch(x) {
         case ONE:
             v1 = 1;
@@ -56,34 +56,34 @@ void take_turn() {
             break;
         }
         switch(y) {
-        case  Akey:
+        case  ZERO:
             v2 = 0;
             break;
-        case Bkey:
+        case ONE:
             v2 = 1;
             break;
-        case Ckey:
+        case TWO:
             v2 = 2;
             break;
-        case Dkey:
+        case THREE:
             v2 = 3;
             break;
-        case Ekey:
+        case FOUR:
             v2 = 4;
             break;
-        case Fkey:
+        case FIVE:
             v2 = 5;
             break;
-        case Gkey:
+        case SIX:
             v2 = 6;
             break;
-        case Hkey:
+        case SEVEN:
             v2 = 7;
             break;
-        case Ikey:
+        case EIGHT:
             v2 = 8;
             break;
-        case Jkey:
+        case NINE:
             v2 = 9;
             break;
         }

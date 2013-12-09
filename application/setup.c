@@ -61,9 +61,9 @@ int start_new_game()
 		//
         receiveGameBoard(player1, total_board_size);
 		place_ships(player_two);
+		sendGameBoard(player2, total_board_size);
 	}
 	
-    if(game_mode == PLAYER) sendGameBoard(player2, total_board_size);
 
     if(player_number == player_one){
         printf("We are getting here\n");

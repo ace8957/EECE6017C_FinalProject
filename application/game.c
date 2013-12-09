@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "keyboard.h"
 #include "ui.h"
+#include "graphics.h"
 
 extern volatile int player_number;
 extern int player1[total_board_size];
@@ -15,7 +16,7 @@ void take_turn() {
     int x=0, y=0;//x and y of target
     int v1 = 0, v2 = 0, value = 0;//v1 = x 0-9, v2 = y 0-9, value = x + (10*y)
     int previous;//the previous value if correct
-    int *editBoard;
+    int *editBoard, *otherBoard;
     while(!valid) {
         do{
             y = getKey();
@@ -107,7 +108,7 @@ void take_turn() {
                 displayMenu("You Missed!",0);
                 clearColorBuf(); clearTextBuf();
 				displayBoard(editBoard, 0);
-				displayBoard(otherboard, 1);
+                displayBoard(otherBoard, 1);
             }
             else{
                 previous = editBoard[value];
@@ -118,7 +119,16 @@ void take_turn() {
                     if(editBoard[100] & (1 << 0) == 1){
                         //display carrier sunk message
                         displayMenu("You sunk enemy carrier",0);
+                        clearColorBuf(); clearTextBuf();
                         displayBoard(editBoard, 0);
+                        displayBoard(otherBoard, 1);
+                        //displayBoard(editBoard, 0);
+                    }
+                    else{
+                        displayMenu("You Hit!",0);
+                        clearColorBuf(); clearTextBuf();
+                        displayBoard(editBoard, 0);
+                        displayBoard(otherBoard, 1);
                     }
                     break;
                 case (battleship):
@@ -127,7 +137,13 @@ void take_turn() {
                         displayMenu("You sunk enemy battleship",0);
                         clearColorBuf(); clearTextBuf();
 						displayBoard(editBoard, 0);
-						displayBoard(otherboard, 1);
+                        displayBoard(otherBoard, 1);
+                    }
+                    else{
+                        displayMenu("You Hit!",0);
+                        clearColorBuf(); clearTextBuf();
+                        displayBoard(editBoard, 0);
+                        displayBoard(otherBoard, 1);
                     }
                     break;
                 case (submarine):
@@ -136,7 +152,13 @@ void take_turn() {
                         displayMenu("You sunk enemy submarine",0);
                         clearColorBuf(); clearTextBuf();
 						displayBoard(editBoard, 0);
-						displayBoard(otherboard, 1);
+                        displayBoard(otherBoard, 1);
+                    }
+                    else{
+                        displayMenu("You Hit!",0);
+                        clearColorBuf(); clearTextBuf();
+                        displayBoard(editBoard, 0);
+                        displayBoard(otherBoard, 1);
                     }
                     break;
                 case (cruiser):
@@ -145,7 +167,13 @@ void take_turn() {
                         displayMenu("You sunk enemy cruiser",0);
                         clearColorBuf(); clearTextBuf();
 						displayBoard(editBoard, 0);
-						displayBoard(otherboard, 1);
+                        displayBoard(otherBoard, 1);
+                    }
+                    else{
+                        displayMenu("You Hit!",0);
+                        clearColorBuf(); clearTextBuf();
+                        displayBoard(editBoard, 0);
+                        displayBoard(otherBoard, 1);
                     }
                     break;
                 case (destroyer):
@@ -154,7 +182,13 @@ void take_turn() {
                         displayMenu("You sunk enemy destroyer",0);
                         clearColorBuf(); clearTextBuf();
 						displayBoard(editBoard, 0);
-						displayBoard(otherboard, 1);
+                        displayBoard(otherBoard, 1);
+                    }
+                    else{
+                        displayMenu("You Hit!",0);
+                        clearColorBuf(); clearTextBuf();
+                        displayBoard(editBoard, 0);
+                        displayBoard(otherBoard, 1);
                     }
                     break;
                 }

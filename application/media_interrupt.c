@@ -64,7 +64,7 @@ int main(void)
 	volatile int * KEY_ptr = (int *) 0x10000050;					// pushbutton KEY address
 	volatile int * PS2_ptr = (int *) 0x10000100;					// PS/2 port address
     unsigned int flags = 0;
-    unsigned availSpace = 0;
+    unsigned availSpace = 0, option = 0;
     
 
     /* initialize some variables */
@@ -162,19 +162,12 @@ int main(void)
 		while (!timeout)
 			;	// wait to synchronize with timer 
 
-        VGA_box(blue_x, blue_y, box_len, background_color);
+        //VGA_box(blue_x, blue_y, box_len, background_color);
         
-        keyVal = getKey();
+        //keyVal = getKey();
         
-        if (keyVal == UP)
-            printf("UP\n");
-        else if (keyVal == DOWN)
-            printf("DOWN\n");
-        else if (keyVal == RIGHT)
-            printf("RIGHT\n");
-        else if (keyVal == LEFT)
-            printf("LEFT\n");
-		keyVal = getKey();
+        option = displayMenu("Main Menu", 2, "Option 1", "Option 2");
+        printf("Option %d\n", option);
         
         if (keyVal == UP)
             printf("UP\n");
@@ -185,25 +178,6 @@ int main(void)
         else if (keyVal == LEFT)
             printf("LEFT\n");
 		keyVal = getKey();
-        
-        if (keyVal == UP)
-            printf("UP\n");
-        else if (keyVal == DOWN)
-            printf("DOWN\n");
-        else if (keyVal == RIGHT)
-            printf("RIGHT\n");
-        else if (keyVal == LEFT)
-            printf("LEFT\n");
-		keyVal = getKey();
-        
-        if (keyVal == UP)
-            printf("UP\n");
-        else if (keyVal == DOWN)
-            printf("DOWN\n");
-        else if (keyVal == RIGHT)
-            printf("RIGHT\n");
-        else if (keyVal == LEFT)
-            printf("LEFT\n");
 
 		/* display PS/2 data (from interrupt service routine) on HEX displays */
 		/*if(change == 1)

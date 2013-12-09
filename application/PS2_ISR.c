@@ -76,7 +76,6 @@ void PS2_ISR( void )
     char lookUpResult;
 	static int ackReceived = 0;
 
-	printf("Inside PS2_ISR()\n");
 	// if(keyboardLock)
 		// return;
 

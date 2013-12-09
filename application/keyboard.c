@@ -9,7 +9,6 @@ extern volatile char byte1, byte2, byte3, byte4;
 // This function will return the most recent key pressed
 int getKey(void)
 {
-	printf("Inside getKey()\n");
     while (1)
     {
         // keyboardLock = 1;

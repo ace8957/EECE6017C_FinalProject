@@ -70,16 +70,18 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
         for(i = 1; i < numOptions; ++i) {
             // Draw the selection background
             optionX = menuX+(menuWidth-optionBoxWidth)/2;
-            optionY = menuY+selection*optionBoxHeight + (optionBoxSeparation/2);
+            optionY = menuY+(i)*optionBoxHeight + (optionBoxSeparation/2);
+            struct color shadow;
             if(i == selection) {
-                drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
+                shadow = colorRGB(50, 50, 110);
             }
             else {
-                drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(11, 10, 177));
+                shadow = colorRGB(11, 10, 177);
             }
+            drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, shadow);
 
             textLen = strlen(optionList[i])*charWidth;
-            optionY = menuY+(i+1)*(optionBoxHeight+optionBoxSeparation);
+            optionY = menuY+(i)*(optionBoxHeight+optionBoxSeparation);
             drawBox(optionX, optionY+(optionBoxSeparation/2), optionBoxWidth, optionBoxHeight, colorRGB(80, 80, 110));
             drawText(optionX+(optionBoxWidth-textLen)/2, optionY+(optionBoxHeight/4), optionList[i]);
         }

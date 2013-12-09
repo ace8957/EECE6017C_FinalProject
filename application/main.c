@@ -10,10 +10,10 @@
 #include "setup.h"
 
 extern volatile int player_number;
-extern volatile int player1[total_board_size];
-extern volatile int player2[total_board_size];
-extern volatile int player1_copy[total_board_size];
-extern volatile int player2_copy[total_board_size];
+extern int player1[total_board_size];
+extern int player2[total_board_size];
+extern int player1_copy[total_board_size];
+extern int player2_copy[total_board_size];
 extern volatile int timeout;
 
 

@@ -67,7 +67,7 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
     do {
         // Draw the selection background
         optionX = menuX+(menuWidth-optionBoxWidth)/2;
-        optionY = menuY+selection*optionBoxHeight + (optionBoxSeparation/2);
+        optionY = menuY+selection*optionBoxHeight + (optionBoxSeparation);
         drawBox(optionX, optionY, optionBoxWidth+optionBoxSeparation, optionBoxHeight+optionBoxSeparation, colorRGB(50, 50, 110));
 
         optionX = menuX+(menuWidth-optionBoxWidth+optionBoxSeparation)/2;
@@ -89,6 +89,8 @@ int displayMenu(const char *title, unsigned int numOptions, ...)
         }
         else if(keyPress == UP) {
             selection = (selection + 1)%numOptions;
+            if(selection == 0)
+                selection = 1;
         }
         else if(keyPress == DOWN) {
             --selection;

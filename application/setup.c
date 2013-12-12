@@ -78,9 +78,7 @@ int start_new_game()
 			printf("fix me still");
 		}
         else {
-            printf("Our AI sucks dick!\n");
             initialize_ai();
-            printf("Out init works...\n");
             ai_place_ships();
             displayBoard(player2,1);
         }

@@ -53,7 +53,7 @@ void HEX_PS2(char, char);
  * 	5. The speed of refreshing the VGA screen
  * 	   are controlled by interrupts from the interval timer
 ********************************************************************************/
-#if (!SERIAL_SHITS) //in globals.h if you want to use
+#if (!SERIAL_ENABLE) //in globals.h if you want to use
 int main(void)
 {
 	/* Declare volatile pointers to I/O registers (volatile means that IO load

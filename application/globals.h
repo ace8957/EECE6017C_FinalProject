@@ -45,6 +45,6 @@
 #define SHOW_SHIPS	1
 #define NO_SHIPS	0
 
-#define SERIAL_SHITS 1
+#define SERIAL_ENABLE 1
 
 #endif //GLOBALS_H

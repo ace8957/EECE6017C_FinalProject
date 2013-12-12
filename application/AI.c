@@ -2,10 +2,11 @@
 #include "AI.h"
 #include <string.h>
 
+void print_board(int *board);
 /*
-	The AI will operate on the board which is passed to itself.
-	It will make a decision about the position it wishes to attach and
-	it will return the index number which it wishes to attack.
+	The AI will operate on a temporary board that will be copied onto the global player2
+    board at the end of the turn. It will make a decision about the position it wishes 
+    to attack and copies the information to the global.
 	
 	The AI will keep track of it's past hits and make decisions based upon
 	the likelihood of achieving another hit in proximity to one of those existing
@@ -19,9 +20,9 @@
 	which will return an integer between 0-99. The index thus obtained must be check in
 	ai_game_board to ensure that we have not already attacked that tile.
 	
-	The AI will also have to place ships in a somewhat intelligent manner. It may initially
-	be hard-coded. This can be accomplished by an ai_place_ships(board) which will accept
-	a pointer to a board (the player two board from globals.c?) and place it's ships on said board.
+	The AI will also have to place ships in a somewhat intelligent manner. This can be 
+    accomplished by an ai_place_ships(board) which will accept a pointer to a board 
+    (the player two board from globals.c) and place it's ships on said board.
 	
 	The AI will keep track of it's moves and make decisions by examining a game board,
 	which will be a local global kept in this file: ai_game_board[total_board_size-1]. This game
@@ -38,12 +39,14 @@
 	
 */
 
-//externs
+// Externs
 extern int player1[total_board_size];
 extern int player2[total_board_size];
+extern int counter; 
 
 int initialize_ai(void) {
-	//we must set the initial values of our internal game board to 0
+	// We must set the initial values of our internal game board to 0
+    // memset does not work on FPGA!
     int count;
     for(count = 0; count < (total_board_size-1); ++count) {
         ai_game_board[count] = 0;
@@ -51,14 +54,10 @@ int initialize_ai(void) {
 	return 0;
 }
 
-struct {
-	struct ship_node* next;
-	int ship_id;
-	int ship_size;
-}ship_node;
-
+// Logic for placing the AI ships semi-intelligently
 void ai_place_ships(void) {
-	int edges[] = {
+	// Battleship research shows at least one ship should be palced along the edge
+    int edges[] = {
 				0,1,2,3,4,5,6,7,8,9,
 				10,20,30,40,50,60,70,80,90,
 				91,92,93,94,95,96,97,98,99,
@@ -66,72 +65,93 @@ void ai_place_ships(void) {
 			};
     int ships [] = {carrier, battleship, submarine, cruiser, destroyer};
     int sizes [] = {carrier_size, battleship_size, submarine_size, cruiser_size, destroyer_size};
+    srand(counter); // Seed the random generator with counter in main.c
 	int random_edge_index = rand() % (sizeof(edges)/sizeof(int));
-    struct ship_node * ship_head;
+    //printf("ramdom edge index: %d\n", random_edge_index); 
+	int direction;
+    int index = 0;
+    int ship_id = 0;
+    int ship_size = 0;
+    int start_index = 0;
+    int tmp_board [total_board_size];
+    
+    int count = 0;
+    // Init tmp_board to zeros
+    for(count = 0; count < (total_board_size-1); ++count) {
+        tmp_board[count] = 0;
+    }
+    //print_board(tmp_board);
+    while(index < 5) {
+        //printf("Outer while loop: index: %d\n", index);
+        ship_id = ships[index];
+        ship_size = sizes[index];
+        direction = rand() % 3;  // N,S,E,W
 
-	//int direction; //int index = 0; //int ship_id = 0; //int ship_size = 0; //int start_index = 0; //int tmp_board [total_board_size]; //while(index < 5) { //    ship_id = ships[index]; //    ship_size = sizes[index]; //    direction = rand() % 3; //    if(index == 0) { //        start_index = edges[random_edge_index]; //    } //    else { //        start_index = rand() % 100; //    } //    int count = 0;
-    //    int tmp_index = start_index;
-    //    while(!check_valid_index(start_index) || count < ship_size) {
-    //        if(!check_valid_index(tmp_index = get_index(tmp_index, direction))) {
-    //            direction = rand() % 3;
-    //            if(index == 0) {
-    //                random_edge_index = rand() % (sizeof(edges)/sizeof(int));
-    //                start_index = edges[random_edge_index];
-    //            }
-    //            else {
-    //                start_index = rand() % 100;
-    //            }
-    //            tmp_index = start_index;
-    //            count = 0;
-    //        }
-    //        else {
-    //            ++count;
-    //        }
-    //    }
-    //    count = 0;
-    //    while(count < ship_size) {
-    //        tmp_board[start_index] = ship_id;
-    //        start_index = get_index(start_index, direction);
-    //        count++;
-    //    }
-    //}
+        // Select the first ship to be placed on the edge or pick randomly
+        if(index == 0) {
+            edges[random_edge_index];
+        }
+        else {
+            start_index = rand() % 99;
+        }
+        int tmp_index = start_index;
+        count = 0;
 
-        
-    //struct ship_node * ship_traverse = NULL;
-    //struct ship_node * ship_head = malloc(sizeof;
-    //while(index < 5) {
-    //    struct ship_node node;
-    //    if(index == 0) {
-    //        ship_traverse = node;
-    //        ship_traverse->next = NULL;
-    //        ship_head->next = NULL;
-    //    }
-    //    node.ship_id = ships[index];
-    //    node.ship_size = sizes[index];
-            
-	//TODO: get rid of this hard code
-	int tmp_board[] = {
-        8,8,8,8,8,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,
-        16,0,0,0,0,0,0,64,0,0,
-        16,0,0,0,0,0,0,64,0,0,
-        16,0,0,0,0,0,0,64,0,0,
-        16,0,0,0,0,0,0,0,0,0,
-        0,0,0,32,32,32,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,128,
-        0,0,0,0,0,0,0,0,0,128,
-    };
-    int count;
-    printf("setting board\n");
+        // Check that the ship can be successfully placed in the generated location
+        while(!check_valid_index(tmp_index, tmp_board) || count < ship_size
+                || !check_boarder(ship_id, tmp_index, direction, tmp_board)) {
+            //printf("Inner while loop: count: %d\n", count);
+            if(!check_valid_index(tmp_index = get_index(tmp_index, direction))
+                    || !check_boarder(ship_id, tmp_index, direction, tmp_board)) {
+                direction = rand() % 3;
+                if(index == 0) {
+                    random_edge_index = rand() % (sizeof(edges)/sizeof(int));
+                    start_index = edges[random_edge_index];
+                }
+                else {
+                    start_index = rand() % 99;
+                }
+                tmp_index = start_index;
+                count = 0;
+            }
+            else {
+                ++count;
+            }
+        }
+        count = 0;
+        //printf("Copying AI board to global player2 board.\n");
+        while(count < ship_size) {
+            tmp_board[start_index] = ship_id;
+            start_index = get_index(start_index, direction, tmp_board);
+            count++;
+        }
+        //printf("Printing ship %d or length %d", ship_id, ship_size);
+        //print_board(tmp_board);
+        index++;
+    }
+
+    //printf("Setting AI Board\n");
     for(count = 0; count < 100; ++count) {
         player2[count] = tmp_board[count];
     }
+    print_board(player2);
 }
 
+// Print board for debugging
+void print_board(int *board){
+    int i = 0;
+    for(i; i<100; i++){
+        if (i % 10 == 0)
+            printf( "\n%d", board[i]);
+        else
+            printf(" %d ", board[i]);
+    }
+}
+
+// Return random board index
 int get_random_index(void) {
 	int r;
-	//Loop until we get an index which has not already been attacked
+	// Loop until we get an index which has not already been attacked
 	while(1) {
 		r = rand() % 100;
 		if(ai_game_board[r] == 0)
@@ -140,7 +160,7 @@ int get_random_index(void) {
 	return r;
 }
 
-//board - the master copy of the board, probably player2[] from globals.c
+// Check for a hit or miss on the human player's board
 int ai_check_hit(int index) {
 	if(player1[index] > hit)
 		return IS_HIT;
@@ -148,27 +168,116 @@ int ai_check_hit(int index) {
 		return IS_MISS;
 }
 
-//board - the master copy of the board, probably player2[] from globals.c
+// AI logic for making an attack on the human's board
 void ai_make_attack(int index) {
 	if(ai_check_hit(index)) {	
-		//set the flag in the ai-only board that is used to make decisions
+		// Set the flag in the ai-only board that is used to make decisions
 		ai_game_board[index] = IS_HIT;
 		locality_count = 0;
 		last_hit = index;
 	}
 	else {
-		//set the flag in the ai-only board that is used to make decisions
+		// Set the flag in the ai-only board that is used to make decisions
 		ai_game_board[index] = IS_MISS;
 	}
 }
 
-int check_valid_index(int index) {
-	if(index > 100 || index < 0 || ai_game_board[index])
-		return 0;
+// Check that the index generated is not off the board or already a ship/hit/miss
+int check_valid_index(int index, int *board) {
+	if(index > 99 || index < 0 || board[index])	
+        return 0;
 	return 1;
 }
 
-int get_index(start_index, direction) {
+// Check that the ship being placed will not go outside the bounds of the board
+int check_boarder(int ship, int index, int direction, int *board){
+    switch(ship){
+        case carrier:
+            if (direction == EAST){
+                int i;
+                for(i=0;i<carrier_size;i++){
+                    if(board[i+index]%10 ==0)
+                        return 0;
+                }
+            } else {
+                int i;
+                for(i=0;i<carrier_size;i++){
+                    if(board[index-i]%10 ==0)
+                        return 0;
+                }
+            }
+            return 1;
+        case battleship:
+            if (direction == EAST){
+                int i;
+                for(i=0;i<battleship_size;i++){
+                    if(board[i+index]%10 ==0)
+                        return 0;
+                }
+            } else {
+                int i;
+                for(i=0;i<battleship_size;i++){
+                    if(board[index-i]%10 ==0)
+                        return 0;
+                }
+            }
+            return 1;
+
+        case submarine:
+            if (direction == EAST){
+                int i;
+                for(i=0;i<submarine_size;i++){
+                    if(board[i+index]%10 ==0)
+                        return 0;
+                }
+            } else {
+                int i;
+                for(i=0;i<submarine_size;i++){
+                    if(board[index-i]%10 ==0)
+                        return 0;
+                }
+            }
+            return 1;
+
+        case cruiser:
+            if (direction == EAST){
+                int i;
+                for(i=0;i<cruiser_size;i++){
+                    if(board[i+index]%10 ==0)
+                        return 0;
+                }
+            } else {
+                int i;
+                for(i=0;i<cruiser_size;i++){
+                    if(board[index-i]%10 ==0)
+                        return 0;
+                }
+            }
+            return 1;
+
+        case destroyer:
+            if (direction == EAST){
+                int i;
+                for(i=0;i<destroyer_size;i++){
+                    if(board[i+index]%10 ==0)
+                        return 0;
+                }
+            } else {
+                int i;
+                for(i=0;i<destroyer_size;i++){
+                    if(board[index-i]%10 ==0)
+                        return 0;
+                }
+            }
+            return 1;
+ 
+        default: 
+            return NONE;
+    }
+}
+
+// Get the index in a specified direction                
+int get_index(int start_index, int direction, int *board) {
 	if(direction > 3 || direction < 0)
 		return NONE;
 	int tmp = 0;
@@ -181,11 +290,12 @@ int get_index(start_index, direction) {
 				break;
 		case WEST: tmp = start_index - 1;
 				break;
-		default: printf("you done fucked up\n");
+		default: printf("Direction invalid\n");
 	}
-	return check_valid_index(tmp) ? tmp : NONE;
+	return check_valid_index(tmp, board) ? tmp : NONE;
 }
 
+// Generates the AI attack and places in the human's game board
 int ai_make_move(void) {
 	int attack_index = NONE;
 	
@@ -199,15 +309,15 @@ int ai_make_move(void) {
 		//use a counter to check cardinal directions
 		if(last_hit && (locality_count < 4)) {
 			switch(locality_count) {
-				case 0:	attack_index = get_index(last_hit, 0);
+				case 0:	attack_index = get_index(last_hit, 0, player2);
 						break;
-				case 1:	attack_index = get_index(last_hit, 1);
+				case 1:	attack_index = get_index(last_hit, 1, player2);
 						break;
-				case 2:	attack_index = get_index(last_hit, 2);
+				case 2:	attack_index = get_index(last_hit, 2, player2);
 						break;
-				case 3: attack_index = get_index(last_hit, 3);
+				case 3: attack_index = get_index(last_hit, 3, player2);
 						break;
-				default: printf("you done fucked up\n");
+				default: printf("Invalid direction\n");
 			}
 		}
 		else {
@@ -220,3 +330,4 @@ int ai_make_move(void) {
 	ai_make_attack(attack_index);
 	return attack_index;
 }
+
